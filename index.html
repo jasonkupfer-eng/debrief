@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Debrief | The Subtitle Arcade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=200">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="solid-bg">
+
+<div class="screen-wrapper">
+    <div class="arcade-cabinet">
+        <div class="crt-screen" id="debriefScreen">
+            <div class="scanlines z-1"></div>
+            
+            <div id="debriefForm" class="debrief-container z-2">
+                <h1 class="arcade-tag flash-title">MISSION DEBRIEF</h1>
+                <div class="slogan-text" style="font-size: 20px; margin-bottom: 40px; color: #a0a0a0;">// PILOT FEEDBACK TERMINAL //</div>
+
+                <div class="form-group" style="align-items: center; margin-bottom: 30px;">
+                    <label class="flat-label">HUMANITY RESTORED?</label>
+                    <div class="humanity-meter" id="humanityMeter">
+                        <span class="pixel-heart" data-val="1">♥</span>
+                        <span class="pixel-heart" data-val="2">♥</span>
+                        <span class="pixel-heart" data-val="3">♥</span>
+                        <span class="pixel-heart" data-val="4">♥</span>
+                        <span class="pixel-heart" data-val="5">♥</span>
+                    </div>
+                    <div class="rating-text" id="ratingText">AWAITING INPUT...</div>
+                    <input type="hidden" id="finalRating" value="0">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 30px; width: 100%; max-width: 600px;">
+                    <label class="flat-label">TRANSMIT COMM-LOG (REVIEW)</label>
+                    <textarea id="debriefLog" class="flat-numeric-input cc-input" placeholder="ENTER MISSION DEBRIEF..." maxlength="300" style="font-family: 'VT323', monospace !important; font-size: 22px !important; resize: none; min-height: 120px;"></textarea>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                        <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #888;">MEMORY USAGE</span>
+                        <div class="memory-bar-container">
+                            <div class="memory-bar" id="memoryBar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="align-items: center; margin-bottom: 40px;">
+                    <label class="flat-label">PILOT INITIALS (HIGH SCORE BOARD)</label>
+                    <input type="text" id="pilotInitials" class="flat-numeric-input cc-input" placeholder="___" maxlength="3" style="text-align: center; width: 120px; font-size: 32px !important; text-transform: uppercase; letter-spacing: 8px !important;">
+                </div>
+
+                <button id="transmitDebriefBtn" class="override-btn-green" style="max-width: 400px;">TRANSMIT DEBRIEF ▶</button>
+            </div>
+
+            <div id="debriefSuccess" class="debrief-container z-2" style="display: none; justify-content: center; text-align: center; height: 100%;">
+                <h2 class="main-title" style="font-size: 40px; margin-bottom: 20px;">UPLINK SUCCESSFUL</h2>
+                <div class="bot-title" style="color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan);">MISSION LOGGED</div>
+                <p class="intel-text" style="font-size: 18px !important; max-width: 500px; margin: 30px auto; color: #fff !important;">
+                    YOUR TRANSMISSION HAS REACHED HQ.<br><br>THE HUMAN RESISTANCE THANKS YOU FOR YOUR SERVICE.
+                </p>
+                <a href="index.html" class="override-btn-pink" style="text-decoration: none; display: inline-block; margin-top: 40px; max-width: 300px;">&lt; RETURN TO BASE</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="debrief.js"></script>
+</body>
+</html>
