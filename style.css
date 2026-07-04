@@ -2556,6 +2556,7 @@ width: 100% !important;      /* Forces the text span to fill the width */
     /* Re-aims the tail directly at the question mark */
     .pro-arcade-tooltip::after { left: 80% !important; }
     .pro-arcade-tooltip::before { left: 80% !important; }
+}
 
 /* =========================================
    MISSION DEBRIEF PAGE STYLES
