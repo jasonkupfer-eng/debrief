@@ -7,32 +7,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=300">
+    <link rel="stylesheet" href="style.css?v=350">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body class="workstation-room">
 
-<!-- Dynamic JS Canvas for Background Screens -->
 <canvas id="hackerRoomCanvas"></canvas>
 
 <div class="physical-desk-environment">
-    <!-- The Desk Surface -->
     <div class="desk-surface"></div>
 
-    <!-- The Tactile Retro Workstation -->
     <div class="retro-workstation">
         
-        <!-- The Main Monitor Chassis -->
         <div class="retro-monitor-chassis">
             <div class="monitor-top-vents"></div>
-            <div class="brand-badge">ARCADE OS/2</div>
             
             <div class="monitor-bezel">
                 <div class="crt-glass-screen" id="debriefScreen">
                     <div class="crt-glare"></div>
                     <div class="crt-subtle-scanlines"></div>
                     
-                    <!-- BIG RED ERROR OVERLAY -->
                     <div id="criticalErrorOverlay" class="critical-error-overlay">
                         <div class="error-box">
                             <span class="error-blink">⚠ FATAL EXCEPTION ⚠</span><br><br>
@@ -41,81 +35,109 @@
                         </div>
                     </div>
 
-                    <!-- Main Debrief Form -->
                     <div id="debriefForm" class="legible-terminal z-2">
                         
-                        <div class="terminal-header">
-                            <div class="term-line">ARCADE MAINFRAME v9.4</div>
-                            <h1 class="term-title">DEBRIEF PROTOCOL</h1>
-                        </div>
-
-                        <!-- Humanity Meter -->
-                        <div class="form-group term-group">
-                            <label class="term-label">> ASSESS HUMANITY LEVELS_</label>
-                            <div class="humanity-meter term-meter" id="humanityMeter">
-                                <span class="pixel-heart term-heart" data-val="1">♥</span>
-                                <span class="pixel-heart term-heart" data-val="2">♥</span>
-                                <span class="pixel-heart term-heart" data-val="3">♥</span>
-                                <span class="pixel-heart term-heart" data-val="4">♥</span>
-                                <span class="pixel-heart term-heart" data-val="5">♥</span>
-                                <div id="flawlessBadge" class="flawless-badge">100% HUMAN</div>
+                        <div class="wy-header">
+                            <div class="wy-stats">
+                                <div>SYS_V 9.4</div>
+                                <div>MEM_OK 99%</div>
                             </div>
-                            <div class="rating-text term-rating" id="ratingText">AWAITING INPUT...</div>
-                            <input type="hidden" id="finalRating" value="0">
+                            <div class="wy-logo-block">
+                                <div class="wy-shape">
+                                    <div class="wy-wing left"></div>
+                                    <div class="wy-center"></div>
+                                    <div class="wy-wing right"></div>
+                                </div>
+                                <div class="wy-text">THE SUBTITLE ARCADE</div>
+                            </div>
+                            <div class="wy-sun">☀</div>
                         </div>
 
-                        <!-- Comm-Log (Text Review) -->
-                        <div class="form-group term-group">
-                            <label class="term-label">> TRANSMIT COMM-LOG_</label>
-                            <textarea id="debriefLog" class="term-input" placeholder="[ ENTER MISSION DEBRIEF ]" maxlength="300"></textarea>
-                            
-                            <!-- Disk Space / Memory Bar -->
-                            <div class="disk-space-container">
-                                <span class="disk-label">DISK_SPACE:</span>
-                                <div class="disk-track">
-                                    <div class="disk-fill" id="memoryBar"></div>
+                        <div class="main-terminal-body">
+                            <div class="form-group term-group">
+                                <label class="term-label">> ASSESS HUMANITY LEVELS_</label>
+                                <div class="humanity-meter term-meter" id="humanityMeter">
+                                    <span class="pixel-heart term-heart" data-val="1">♥</span>
+                                    <span class="pixel-heart term-heart" data-val="2">♥</span>
+                                    <span class="pixel-heart term-heart" data-val="3">♥</span>
+                                    <span class="pixel-heart term-heart" data-val="4">♥</span>
+                                    <span class="pixel-heart term-heart" data-val="5">♥</span>
+                                    <div id="flawlessBadge" class="flawless-badge">100% HUMAN</div>
+                                </div>
+                                <div class="rating-text term-rating" id="ratingText">AWAITING INPUT...</div>
+                                <input type="hidden" id="finalRating" value="0">
+                            </div>
+
+                            <div class="form-group term-group">
+                                <label class="term-label">> TRANSMIT COMM-LOG_</label>
+                                <textarea id="debriefLog" class="term-input" placeholder="[ ENTER MISSION DEBRIEF ]" maxlength="300"></textarea>
+                                
+                                <div class="disk-space-container">
+                                    <span class="disk-label">DISK_SPACE:</span>
+                                    <div class="disk-track"><div class="disk-fill" id="memoryBar"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="term-dual-row">
+                                <div class="form-group term-group" style="flex: 2;">
+                                    <label class="term-label">> COORDS [EMAIL]_</label>
+                                    <input type="email" id="pilotEmail" class="term-input" placeholder="PILOT@RESISTANCE.COM">
+                                </div>
+                                <div class="form-group term-group" style="flex: 1;">
+                                    <label class="term-label">> ID [INITIALS]_</label>
+                                    <input type="text" id="pilotInitials" class="term-input text-center" placeholder="___" maxlength="3">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Dual Input Row -->
-                        <div class="term-dual-row">
-                            <div class="form-group term-group" style="flex: 2;">
-                                <label class="term-label">> COORDS [EMAIL]_</label>
-                                <input type="email" id="pilotEmail" class="term-input" placeholder="PILOT@RESISTANCE.COM">
-                            </div>
-                            <div class="form-group term-group" style="flex: 1;">
-                                <label class="term-label">> ID [INITIALS]_</label>
-                                <input type="text" id="pilotInitials" class="term-input text-center" placeholder="___" maxlength="3">
-                            </div>
+                        <div class="wy-footer">
+                            <button id="transmitDebriefBtn" class="tactile-terminal-btn">[ EXECUTE TRANSMISSION ]</button>
                         </div>
-
-                        <button id="transmitDebriefBtn" class="tactile-terminal-btn">[ EXECUTE TRANSMISSION ]</button>
                     </div>
 
-                    <!-- Success Screen -->
-                    <div id="debriefSuccess" class="legible-terminal z-2" style="display: none; justify-content: center;">
-                        <h2 class="term-success-title">UPLINK SUCCESSFUL</h2>
-                        <div class="term-line">MISSION LOGGED IN MAINFRAME.</div>
-                        <p class="term-desc" style="margin-top: 30px;">
-                            YOUR TRANSMISSION HAS REACHED HQ.<br><br>THE HUMAN RESISTANCE THANKS YOU.
-                        </p>
-                        <a href="https://thesubtitlearcade.com" class="tactile-terminal-btn" style="text-decoration: none; margin-top: 40px; display: inline-block;">[ RETURN TO BASE ]</a>
+                    <div id="debriefSuccess" class="legible-terminal success-layout z-2" style="display: none;">
+                        <div class="success-top">
+                            <h2 class="term-success-title blink-text">UPLINK SUCCESSFUL</h2>
+                            <div class="term-line">MISSION LOGGED IN MAINFRAME.</div>
+                        </div>
+                        
+                        <div class="success-middle">
+                            <p class="term-desc">
+                                YOUR TRANSMISSION HAS REACHED HQ.<br><br>
+                                THE HUMAN RESISTANCE THANKS YOU FOR YOUR SERVICE.
+                            </p>
+                        </div>
+
+                        <div class="success-bottom">
+                            <a href="https://thesubtitlearcade.com" class="tactile-terminal-btn return-btn">[ RETURN TO BASE ]</a>
+                        </div>
                     </div>
 
                 </div>
             </div>
+        </div>
 
-            <div class="monitor-hardware-controls">
-                <div class="hw-knob"></div>
-                <div class="hw-knob"></div>
+        <div class="pc-base-unit">
+            <div class="base-badge">ARCADE-SYS 64</div>
+            <div class="drive-bay-container">
+                <div class="disk-drive">
+                    <div class="drive-slot"></div>
+                    <div class="drive-btn"></div>
+                    <div class="drive-light"></div>
+                </div>
+                <div class="disk-drive">
+                    <div class="drive-slot"></div>
+                    <div class="drive-btn"></div>
+                    <div class="drive-light active-pulse"></div>
+                </div>
+            </div>
+            <div class="power-bank">
+                <div class="vent-grille"></div>
                 <div class="hw-power-btn" id="powerBtn"></div>
             </div>
         </div>
 
-        <!-- The Peripherals -->
         <div class="peripherals-zone">
-            <!-- Dynamically populated by JS -->
             <div class="retro-keyboard" id="tactileKeyboard"></div>
             <div class="retro-mouse">
                 <div class="mouse-btn left"></div>
