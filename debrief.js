@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- 1. CONCRETE HACKER ROOM CANVAS (FIXED POSITIONS, HIGH DETAIL) ---
+    // --- 1. CONCRETE HACKER ROOM CANVAS ---
     const canvas = document.getElementById('hackerRoomCanvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Hardcoded Monitor Layout using percentages so it scales properly
     const monitors = [
         { x: 0.05, y: 0.15, w: 0.12, h: 0.20, color: '#00f0ff', blur: 3, type: 'text', data: { lines: [] } },
         { x: 0.20, y: 0.45, w: 0.08, h: 0.12, color: '#ffea00', blur: 8, type: 'glitch', data: {} },
@@ -20,11 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
         { x: 0.28, y: 0.20, w: 0.14, h: 0.25, color: '#39ff14', blur: 2, type: 'matrix', data: { columns: [] } },
         { x: 0.78, y: 0.15, w: 0.16, h: 0.25, color: '#ff007f', blur: 6, type: 'spectrum', data: { phase: 0 } },
         { x: 0.72, y: 0.55, w: 0.12, h: 0.20, color: '#39ff14', blur: 1, type: 'chart', data: { bars: Array(8).fill(0) } },
-        { x: 0.88, y: 0.65, w: 0.10, h: 0.25, color: '#00f0ff', blur: 4, type: 'text', data: { lines: [] } }
-{ x: 0.62, y: 0.22, w: 0.06, h: 0.10, color: '#ffea00', blur: 2, type: 'flicker', data: {} }
+        { x: 0.88, y: 0.65, w: 0.10, h: 0.25, color: '#00f0ff', blur: 4, type: 'text', data: { lines: [] } },
+        { x: 0.62, y: 0.22, w: 0.06, h: 0.10, color: '#ffea00', blur: 2, type: 'flicker', data: {} } 
     ];
 
-    // Pre-fill text lines
     monitors.forEach(mon => {
         if (mon.type === 'text') {
             for (let i = 0; i < 20; i++) mon.data.lines.push(generateHex());
@@ -39,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function drawBackground() {
+        // MUST reset to source-over so the black canvas clears correctly
+        ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, width, height);
         
         monitors.forEach(mon => {
@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const ph = mon.h * height;
 
             ctx.save();
+            ctx.globalCompositeOperation = 'source-over'; // Crucial fix for visibility
             if (mon.blur > 0) ctx.filter = `blur(${mon.blur}px)`;
 
             // Draw Bezel
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.rect(px, py, pw, ph);
             ctx.clip();
 
-            // Draw Dynamic Content
+            // ONLY the internal screen effects use Screen blending
             ctx.globalCompositeOperation = 'screen';
             ctx.fillStyle = mon.color;
             ctx.strokeStyle = mon.color;
@@ -127,12 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     ctx.fillRect(px + Math.random() * pw, py + gY, 10, gH);
                 }
             }
-else if (mon.type === 'flicker') {
-                // Randomly flash through the arcade colors
+            else if (mon.type === 'flicker') {
                 if (Math.random() > 0.4) {
                     const flickerColors = ['#ff007f', '#00f0ff', '#39ff14', '#ffea00', '#ffffff'];
                     ctx.fillStyle = flickerColors[Math.floor(Math.random() * flickerColors.length)];
-                    ctx.globalAlpha = 0.7 + Math.random() * 0.3; // Very bright flash
+                    ctx.globalAlpha = 0.7 + Math.random() * 0.3;
                     ctx.fillRect(px, py, pw, ph);
                 }
             }
