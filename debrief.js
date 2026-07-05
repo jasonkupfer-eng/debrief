@@ -1,9 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
     
+    // --- AUDIO SYNTHESIZER (No external files needed) ---
+    function playRetroDing() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // High pitch (A5)
+        oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1); // Slide up
+        
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5); // Fade out
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.5);
+    }
+
     // --- 1. HUMANITY METER (HEARTS) LOGIC ---
     const hearts = document.querySelectorAll('.pixel-heart');
     const ratingText = document.getElementById('ratingText');
     const finalRatingInput = document.getElementById('finalRating');
+    const flawlessBadge = document.getElementById('flawlessBadge');
     let currentRating = 0;
 
     const ratingMessages = [
@@ -12,44 +33,39 @@ document.addEventListener("DOMContentLoaded", () => {
         "[2/5] BARELY FUNCTIONING.",
         "[3/5] ACCEPTABLE PROTOCOL.",
         "[4/5] STRONG HUMAN EFFORT.",
-        "[5/5] 100% HUMAN. FLAWLESS VICTORY."
+        "[5/5] HUMANITY RESTORED."
     ];
 
-    const ratingColors = ["#888", "#ff007f", "#ffea00", "#39ff14", "#00f0ff", "#39ff14"];
-
     hearts.forEach((heart, index) => {
-        // Hover Effects
         heart.addEventListener('mouseenter', () => {
             hearts.forEach((h, i) => {
                 if (i <= index) h.classList.add('hover-active');
                 else h.classList.remove('hover-active');
             });
             ratingText.innerText = ratingMessages[index + 1];
-            ratingText.style.color = ratingColors[index + 1];
         });
 
-        // Remove Hover Effects
         heart.addEventListener('mouseleave', () => {
             hearts.forEach(h => h.classList.remove('hover-active'));
             ratingText.innerText = ratingMessages[currentRating];
-            ratingText.style.color = ratingColors[currentRating];
         });
 
-        // Click to Lock in Rating
         heart.addEventListener('click', () => {
             currentRating = index + 1;
             finalRatingInput.value = currentRating;
             
-            // Lock in the active class
             hearts.forEach((h, i) => {
-                h.classList.remove('error-flash'); // Clear any previous errors
                 if (i < currentRating) h.classList.add('active');
                 else h.classList.remove('active');
             });
-            
-            // Pop the text
-            ratingText.style.textShadow = `0 0 10px ${ratingColors[currentRating]}`;
-            setTimeout(() => { ratingText.style.textShadow = 'none'; }, 300);
+
+            // Trigger the Badge and Ding on 5th Star
+            if (currentRating === 5) {
+                flawlessBadge.classList.add('show');
+                playRetroDing();
+            } else {
+                flawlessBadge.classList.remove('show');
+            }
         });
     });
 
@@ -62,17 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const length = debriefLog.value.length;
             const max = debriefLog.getAttribute('maxlength');
             const percentage = (length / max) * 100;
-            
             memoryBar.style.width = `${percentage}%`;
-
-            // Change color as it gets full
-            if (percentage < 50) {
-                memoryBar.style.backgroundColor = "var(--neon-green)";
-            } else if (percentage < 85) {
-                memoryBar.style.backgroundColor = "#ffea00";
-            } else {
-                memoryBar.style.backgroundColor = "var(--neon-pink)";
-            }
+            memoryBar.style.backgroundColor = percentage > 85 ? "#ff0000" : "#39ff14";
         });
     }
 
@@ -81,73 +88,54 @@ document.addEventListener("DOMContentLoaded", () => {
     const debriefForm = document.getElementById('debriefForm');
     const debriefSuccess = document.getElementById('debriefSuccess');
     const crtScreen = document.getElementById('debriefScreen');
+    const errorOverlay = document.getElementById('criticalErrorOverlay');
+
+    // Trigger Floppy Light on click
+    const floppyLight = document.querySelector('.floppy-light');
 
     transmitBtn.addEventListener('click', async () => {
         const rating = finalRatingInput.value;
         const log = debriefLog.value.trim();
-const email = document.getElementById('pilotEmail').value.trim();
+        const email = document.getElementById('pilotEmail').value.trim();
         const initials = document.getElementById('pilotInitials').value.trim();
 
-        // VALIDATION: Did they forget to rate?
-        if (rating === "0") {
-            hearts.forEach(h => h.classList.add('error-flash'));
-            ratingText.innerText = "ERR: RATING REQUIRED FOR TRANSMISSION";
-            ratingText.style.color = "var(--neon-pink)";
+        // VALIDATION: BIG RED ERROR FOR MISSING DATA
+        if (rating === "0" || !email || !email.includes('@') || !initials) {
+            errorOverlay.classList.add('active');
+            
+            // Auto-hide the brutal red error after 2.5 seconds
             setTimeout(() => {
-                hearts.forEach(h => h.classList.remove('error-flash'));
-                ratingText.innerText = "AWAITING INPUT...";
-                ratingText.style.color = "#888";
-            }, 2000);
-            return;
-        }
-// VALIDATION: Missing Email <-- NEW
-        if (!email || !email.includes('@')) {
-            const emailInput = document.getElementById('pilotEmail');
-            emailInput.style.borderColor = "var(--neon-pink)";
-            setTimeout(() => { emailInput.style.borderColor = "var(--neon-cyan)"; }, 2000);
+                errorOverlay.classList.remove('active');
+            }, 2500);
             return;
         }
 
-        // VALIDATION: Missing Initials
-        if (!initials) {
-            const initialInput = document.getElementById('pilotInitials');
-            initialInput.style.borderColor = "var(--neon-pink)";
-            setTimeout(() => { initialInput.style.borderColor = "var(--neon-cyan)"; }, 2000);
-            return;
-        }
-
-        transmitBtn.innerText = "TRANSMITTING...";
+        transmitBtn.innerText = "[ TRANSMITTING... ]";
         transmitBtn.style.pointerEvents = "none";
+        if(floppyLight) floppyLight.classList.add('active');
 
         try {
-            // Transmit the payload to your Vercel backend
             const res = await fetch('/api/send-review', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ rating, log, email, initials }) // <-- Added 'email' here
+                body: JSON.stringify({ rating, log, email, initials })
             });
 
             if (!res.ok) throw new Error('Transmission failed');
 
-            // TRIGGER THE VIOLENT GLITCH
-            crtScreen.classList.add('glitch-crash');
-
-            // Swap the screens while it's glitching out
-            setTimeout(() => {
-                debriefForm.style.display = "none";
-                debriefSuccess.style.display = "flex";
-                crtScreen.classList.remove('glitch-crash');
-            }, 400);
+            // Swap the screens
+            debriefForm.style.display = "none";
+            debriefSuccess.style.display = "flex";
+            if(floppyLight) floppyLight.classList.remove('active');
 
         } catch (error) {
-            transmitBtn.innerText = "UPLINK FAILED. RETRY.";
+            transmitBtn.innerText = "[ UPLINK FAILED. RETRY. ]";
             transmitBtn.style.pointerEvents = "auto";
-            transmitBtn.style.borderColor = "var(--neon-pink)";
-            transmitBtn.style.color = "var(--neon-pink)";
+            if(floppyLight) floppyLight.classList.remove('active');
         }
     });
 
-    // Auto-formatting for Initials (force uppercase, no numbers)
+    // Auto-formatting for Initials
     const initialInput = document.getElementById('pilotInitials');
     if (initialInput) {
         initialInput.addEventListener('input', function() {

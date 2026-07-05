@@ -1,71 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission Debrief | The Subtitle Arcade</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=200">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body class="solid-bg">
+<body class="solid-bg hacker-room-bg">
+
+<!-- Animated Background Screens -->
+<div class="ambient-screens"></div>
 
 <div class="screen-wrapper">
-    <div class="arcade-cabinet">
-        <div class="crt-screen" id="debriefScreen">
-            <div class="scanlines z-1"></div>
-            
-            <div id="debriefForm" class="debrief-container z-2">
-                <h1 class="arcade-tag flash-title">MISSION DEBRIEF</h1>
-                <div class="slogan-text" style="font-size: 20px; margin-bottom: 40px; color: #a0a0a0;">// PILOT FEEDBACK TERMINAL //</div>
+    <!-- The Tactile Orange Workstation -->
+    <div class="tactile-orange-chassis">
+        
+        <!-- Physical Machine Details -->
+        <div class="chassis-vents"></div>
+        <div class="floppy-drive"><div class="floppy-slot"></div><div class="floppy-light"></div></div>
+        <div class="chassis-badge">WY-79 TERMINAL</div>
 
-                <div class="form-group" style="align-items: center; margin-bottom: 30px;">
-                    <label class="flat-label">HUMANITY RESTORED?</label>
-                    <div class="humanity-meter" id="humanityMeter">
-                        <span class="pixel-heart" data-val="1">♥</span>
-                        <span class="pixel-heart" data-val="2">♥</span>
-                        <span class="pixel-heart" data-val="3">♥</span>
-                        <span class="pixel-heart" data-val="4">♥</span>
-                        <span class="pixel-heart" data-val="5">♥</span>
+        <!-- The Green CRT Screen -->
+        <div class="green-terminal-screen" id="debriefScreen">
+            <div class="green-scanlines"></div>
+            
+            <!-- BIG RED ERROR OVERLAY (Hidden by default) -->
+            <div id="criticalErrorOverlay" class="critical-error-overlay">
+                <div class="error-box">
+                    <span class="error-blink">⚠ SYSTEM FAULT ⚠</span><br><br>
+                    MISSING RETURN COORDS [EMAIL]<br>
+                    TRANSMISSION ABORTED.
+                </div>
+            </div>
+
+            <!-- Main Debrief Form -->
+            <div id="debriefForm" class="debrief-container z-2 terminal-mode">
+                
+                <!-- Weyland-Yutani Style Header -->
+                <div class="terminal-header">
+                    <div class="term-line">SYS: MU/TH/ER 6000</div>
+                    <div class="term-line">ENV: SUBTITLE_ARCADE</div>
+                    <h1 class="term-title">DEBRIEF PROTOCOL</h1>
+                </div>
+
+                <!-- Humanity Meter (Star Rating) -->
+                <div class="form-group term-group">
+                    <label class="term-label">> ASSESS HUMANITY LEVELS_</label>
+                    <div class="humanity-meter term-meter" id="humanityMeter">
+                        <span class="pixel-heart term-heart" data-val="1">♥</span>
+                        <span class="pixel-heart term-heart" data-val="2">♥</span>
+                        <span class="pixel-heart term-heart" data-val="3">♥</span>
+                        <span class="pixel-heart term-heart" data-val="4">♥</span>
+                        <span class="pixel-heart term-heart" data-val="5">♥</span>
+                        <!-- The Flawless Badge -->
+                        <div id="flawlessBadge" class="flawless-badge">100% HUMAN</div>
                     </div>
-                    <div class="rating-text" id="ratingText">AWAITING INPUT...</div>
+                    <div class="rating-text term-rating" id="ratingText">AWAITING INPUT...</div>
                     <input type="hidden" id="finalRating" value="0">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 30px; width: 100%; max-width: 600px;">
-                    <label class="flat-label">TRANSMIT COMM-LOG (REVIEW)</label>
-                    <textarea id="debriefLog" class="flat-numeric-input cc-input" placeholder="ENTER MISSION DEBRIEF..." maxlength="300" style="font-family: 'VT323', monospace !important; font-size: 22px !important; resize: none; min-height: 120px;"></textarea>
+                <!-- Comm-Log (Text Review) -->
+                <div class="form-group term-group">
+                    <label class="term-label">> TRANSMIT COMM-LOG_</label>
+                    <textarea id="debriefLog" class="term-input" placeholder="[ ENTER MISSION DEBRIEF ]" maxlength="300"></textarea>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-                        <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #888;">MEMORY USAGE</span>
-                        <div class="memory-bar-container">
-                            <div class="memory-bar" id="memoryBar"></div>
+                    <div class="term-memory-row">
+                        <span>MEM_USAGE:</span>
+                        <div class="term-memory-bar-container">
+                            <div class="term-memory-bar" id="memoryBar"></div>
                         </div>
                     </div>
                 </div>
 
-<div class="form-group" style="align-items: center; margin-bottom: 30px;">
-                    <label class="flat-label">RETURN COORDS (EMAIL)</label>
-                    <input type="email" id="pilotEmail" class="flat-numeric-input cc-input" placeholder="PILOT@RESISTANCE.COM" style="text-align: center; max-width: 400px;">
+                <!-- Dual Input Row -->
+                <div class="term-dual-row">
+                    <div class="form-group term-group">
+                        <label class="term-label">> COORDS [EMAIL]_</label>
+                        <input type="email" id="pilotEmail" class="term-input small-input" placeholder="PILOT@RESISTANCE.COM">
+                    </div>
+                    
+                    <div class="form-group term-group">
+                        <label class="term-label">> ID [INITIALS]_</label>
+                        <input type="text" id="pilotInitials" class="term-input small-input" placeholder="___" maxlength="3">
+                    </div>
                 </div>
 
-                <div class="form-group" style="align-items: center; margin-bottom: 40px;">
-                    <label class="flat-label">PILOT INITIALS (HIGH SCORE BOARD)</label>
-                    <input type="text" id="pilotInitials" class="flat-numeric-input cc-input" placeholder="___" maxlength="3" style="text-align: center; width: 120px; font-size: 32px !important; text-transform: uppercase; letter-spacing: 8px !important;">
-                </div>
-
-                <button id="transmitDebriefBtn" class="override-btn-green" style="max-width: 400px;">TRANSMIT DEBRIEF ▶</button>
+                <button id="transmitDebriefBtn" class="term-btn">[ EXECUTE TRANSMISSION ]</button>
             </div>
 
-            <div id="debriefSuccess" class="debrief-container z-2" style="display: none; justify-content: center; text-align: center; height: 100%;">
-                <h2 class="main-title" style="font-size: 40px; margin-bottom: 20px;">UPLINK SUCCESSFUL</h2>
-                <div class="bot-title" style="color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan);">MISSION LOGGED</div>
-                <p class="intel-text" style="font-size: 18px !important; max-width: 500px; margin: 30px auto; color: #fff !important;">
-                    YOUR TRANSMISSION HAS REACHED HQ.<br><br>THE HUMAN RESISTANCE THANKS YOU FOR YOUR SERVICE.
+            <!-- Success Screen (Hidden initially) -->
+            <div id="debriefSuccess" class="debrief-container z-2 terminal-mode" style="display: none; justify-content: center;">
+                <h2 class="term-success-title">UPLINK SUCCESSFUL</h2>
+                <div class="term-line">MISSION LOGGED IN MAINFRAME.</div>
+                <p class="term-desc" style="margin-top: 30px;">
+                    YOUR TRANSMISSION HAS REACHED HQ.<br><br>THE HUMAN RESISTANCE THANKS YOU.
                 </p>
-                <a href="index.html" class="override-btn-pink" style="text-decoration: none; display: inline-block; margin-top: 40px; max-width: 300px;">&lt; RETURN TO BASE</a>
+                <a href="https://thesubtitlearcade.com" class="term-btn" style="text-decoration: none; margin-top: 40px; display: inline-block;">[ RETURN TO BASE ]</a>
             </div>
 
         </div>
@@ -74,4 +96,3 @@
 
 <script src="debrief.js"></script>
 </body>
-</html>
