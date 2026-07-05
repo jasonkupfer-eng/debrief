@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { x: 0.78, y: 0.15, w: 0.16, h: 0.25, color: '#ff007f', blur: 6, type: 'spectrum', data: { phase: 0 } },
         { x: 0.72, y: 0.55, w: 0.12, h: 0.20, color: '#39ff14', blur: 1, type: 'chart', data: { bars: Array(8).fill(0) } },
         { x: 0.88, y: 0.65, w: 0.10, h: 0.25, color: '#00f0ff', blur: 4, type: 'text', data: { lines: [] } }
+{ x: 0.62, y: 0.22, w: 0.06, h: 0.10, color: '#ffea00', blur: 2, type: 'flicker', data: {} }
     ];
 
     // Pre-fill text lines
@@ -124,6 +125,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     ctx.fillRect(px, py + gY, pw, gH);
                     ctx.fillStyle = '#fff';
                     ctx.fillRect(px + Math.random() * pw, py + gY, 10, gH);
+                }
+            }
+else if (mon.type === 'flicker') {
+                // Randomly flash through the arcade colors
+                if (Math.random() > 0.4) {
+                    const flickerColors = ['#ff007f', '#00f0ff', '#39ff14', '#ffea00', '#ffffff'];
+                    ctx.fillStyle = flickerColors[Math.floor(Math.random() * flickerColors.length)];
+                    ctx.globalAlpha = 0.7 + Math.random() * 0.3; // Very bright flash
+                    ctx.fillRect(px, py, pw, ph);
                 }
             }
 
