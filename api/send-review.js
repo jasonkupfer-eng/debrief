@@ -5,7 +5,8 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { rating, log, initials } = req.body;
+    // NEW: Now catching the email
+    const { rating, log, email, initials } = req.body;
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -20,6 +21,7 @@ export default async function handler(req, res) {
     const textBody = `
 >>> MISSION DEBRIEF RECORDED <<<
 PILOT INITIALS: ${initials}
+COORDS: ${email}
 HUMANITY RATING: ${rating} / 5
 
 [ COMM-LOG ]
@@ -55,6 +57,7 @@ ${log || "NO LOG PROVIDED"}
                             <h2 style="color:#00f0ff; font-family: monospace; font-size: 20px; letter-spacing: 2px; margin-bottom: 20px;">>>> MISSION DEBRIEF RECORDED <<<</h2>
                             
                             <p style="color:#39ff14; font-family: monospace; font-size: 16px; margin: 0 0 5px 0;"><strong>PILOT INITIALS:</strong> <span style="color:#fff;">${initials}</span></p>
+                            <p style="color:#39ff14; font-family: monospace; font-size: 16px; margin: 0 0 5px 0;"><strong>COORDS:</strong> <a href="mailto:${email}" style="color:#ffea00;">${email}</a></p>
                             <p style="color:#ffea00; font-family: monospace; font-size: 16px; margin: 0 0 20px 0;"><strong>HUMANITY RATING:</strong> <span style="color:#fff;">${rating} / 5</span></p>
                             
                             <div style="border-top: 2px dashed #444; margin: 20px 0;"></div>
@@ -78,6 +81,7 @@ ${log || "NO LOG PROVIDED"}
         await transporter.sendMail({
             from: `"Arcade Mainframe" <${process.env.EMAIL_USER}>`,
             to: process.env.EMAIL_USER, 
+            replyTo: email, // <-- THE MAGIC FIX FOR GMAIL
             subject: `🚨 NEW PILOT DEBRIEF: ${initials} - ${rating}/5 Stars`,
             text: textBody,
             html: htmlBody
