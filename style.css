@@ -2705,8 +2705,9 @@ body.workstation-room {
     background: #4a7a7a; 
     border: 4px solid #1a1b26; border-bottom: none;
     border-radius: 4px 4px 0 0;
-    position: relative; z-index: 9;
-    margin-bottom: -28px; /* Massively increased to bridge the 3D perspective gap! */
+    position: relative; 
+    z-index: 7; /* FIXED: Dropped behind the base so the dial safely overlaps it */
+    margin-bottom: -28px;
 }
 .phone-cradle::before, .phone-cradle::after {
     content: ''; position: absolute;
@@ -2750,18 +2751,24 @@ body.workstation-room {
 }
 .p-foot { width: 20px; height: 12px; background: #1a1b26; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
 
-/* Solid Layered Cord */
+/* Pixel-Art Coiled Cord */
 .phone-cord {
-    position: absolute; left: -30px; bottom: 5px; width: 40px; height: 35px;
-    border-bottom: 10px solid #1a1b26;
-    border-left: 10px solid #1a1b26;
-    border-bottom-left-radius: 20px; z-index: 1;
-}
-.phone-cord::after {
-    content: ''; position: absolute; left: -5px; bottom: -5px; width: 40px; height: 35px;
-    border-bottom: 4px solid #6da4a4;
-    border-left: 4px solid #6da4a4;
-    border-bottom-left-radius: 15px;
+    position: absolute;
+    left: -16px; 
+    bottom: 18px; 
+    width: 40px; 
+    height: 52px; 
+    border: 7px dotted #6da4a4;
+    border-right: none;
+    border-radius: 20px 0 0 20px;
+    z-index: 1; /* Slides perfectly behind the base and handset to link them */
+    
+    /* Creates a 4-way solid black outline around every single dot */
+    filter: 
+        drop-shadow(2px 0px 0px #1a1b26) 
+        drop-shadow(-2px 0px 0px #1a1b26) 
+        drop-shadow(0px 2px 0px #1a1b26) 
+        drop-shadow(0px -2px 0px #1a1b26);
 }
 
 /* --- THE POTTED PLANT (RIGHT SIDE) --- */
