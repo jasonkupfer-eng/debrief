@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transmitBtn.addEventListener('click', async () => {
         const rating = finalRatingInput.value;
         const log = debriefLog.value.trim();
+const email = document.getElementById('pilotEmail').value.trim();
         const initials = document.getElementById('pilotInitials').value.trim();
 
         // VALIDATION: Did they forget to rate?
@@ -97,6 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 ratingText.innerText = "AWAITING INPUT...";
                 ratingText.style.color = "#888";
             }, 2000);
+            return;
+        }
+// VALIDATION: Missing Email <-- NEW
+        if (!email || !email.includes('@')) {
+            const emailInput = document.getElementById('pilotEmail');
+            emailInput.style.borderColor = "var(--neon-pink)";
+            setTimeout(() => { emailInput.style.borderColor = "var(--neon-cyan)"; }, 2000);
             return;
         }
 
@@ -112,11 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
         transmitBtn.style.pointerEvents = "none";
 
         try {
-            // YOU WILL ADD YOUR VERCEL/BACKEND FETCH CALL HERE 
-            // await fetch('/api/send-review', { ... payload: { rating, log, initials } });
-            
-            // Simulate network delay for effect
-            await new Promise(r => setTimeout(r, 800));
+            // Transmit the payload to your Vercel backend
+            const res = await fetch('/api/send-review', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rating, log, email, initials }) // <-- Added 'email' here
+            });
+
+            if (!res.ok) throw new Error('Transmission failed');
 
             // TRIGGER THE VIOLENT GLITCH
             crtScreen.classList.add('glitch-crash');
