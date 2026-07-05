@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { x: 0.28, y: 0.20, w: 0.14, h: 0.25, color: '#39ff14', blur: 2, type: 'matrix', data: { columns: [] } },
         { x: 0.78, y: 0.15, w: 0.16, h: 0.25, color: '#ff007f', blur: 6, type: 'spectrum', data: { phase: 0 } },
         { x: 0.72, y: 0.55, w: 0.12, h: 0.20, color: '#39ff14', blur: 1, type: 'chart', data: { bars: Array(8).fill(0) } },
-        { x: 0.88, y: 0.65, w: 0.10, h: 0.25, color: '#00f0ff', blur: 4, type: 'text', data: { lines: [] } },
+        { x: 0.88, y: 0.65, w: 0.10, h: 0.25, color: '#00f0ff', blur: 4, type: 'vertical-text', data: {} }, // Modified to Vertical Text
         { x: 0.62, y: 0.22, w: 0.06, h: 0.10, color: '#ffea00', blur: 2, type: 'flicker', data: {} } 
     ];
 
@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function drawBackground() {
-        // MUST reset to source-over so the black canvas clears correctly
         ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, width, height);
         
@@ -48,24 +47,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const ph = mon.h * height;
 
             ctx.save();
-            ctx.globalCompositeOperation = 'source-over'; // Crucial fix for visibility
+            ctx.globalCompositeOperation = 'source-over'; 
             if (mon.blur > 0) ctx.filter = `blur(${mon.blur}px)`;
 
-            // Draw Bezel
-            ctx.fillStyle = '#0a0a0a';
+            // Bright Gray Visible Bezel
+            ctx.fillStyle = '#222222';
             ctx.fillRect(px - 10, py - 10, pw + 20, ph + 20);
-            ctx.strokeStyle = '#222';
+            ctx.strokeStyle = '#666666'; 
             ctx.lineWidth = 4;
             ctx.strokeRect(px - 10, py - 10, pw + 20, ph + 20);
 
-            // Draw Screen Background
+            // Screen Background
             ctx.fillStyle = '#020502';
             ctx.fillRect(px, py, pw, ph);
             ctx.beginPath();
             ctx.rect(px, py, pw, ph);
             ctx.clip();
 
-            // ONLY the internal screen effects use Screen blending
             ctx.globalCompositeOperation = 'screen';
             ctx.fillStyle = mon.color;
             ctx.strokeStyle = mon.color;
@@ -118,6 +116,32 @@ document.addEventListener("DOMContentLoaded", () => {
                     ctx.fillText(Math.random().toString(36).substring(2, 3).toUpperCase(), px + (i * colW), py + col.y);
                 });
             }
+            else if (mon.type === 'vertical-text') {
+                // Downward Typing Text Logic
+                ctx.font = '12px monospace';
+                ctx.globalAlpha = 0.9;
+                
+                if (!mon.data.cols) {
+                    const numCols = Math.floor(pw / 15);
+                    mon.data.cols = Array(numCols).fill(0).map(() => ({
+                        chars: [],
+                        timer: Math.random() * 10
+                    }));
+                }
+                
+                mon.data.cols.forEach((col, i) => {
+                    col.timer -= 1;
+                    if (col.timer <= 0) {
+                        // Adds random characters
+                        col.chars.push(String.fromCharCode(0x30A0 + Math.random() * 96));
+                        col.timer = 2 + Math.random() * 3;
+                        if (col.chars.length * 14 > ph) col.chars.shift();
+                    }
+                    col.chars.forEach((char, j) => {
+                        ctx.fillText(char, px + 5 + (i * 15), py + 15 + (j * 14));
+                    });
+                });
+            }
             else if (mon.type === 'glitch') {
                 if (Math.random() > 0.5) {
                     ctx.globalAlpha = Math.random();
@@ -137,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // Screen Glow & Scanlines
+            // Glow & Scanlines
             ctx.fillStyle = mon.color;
             ctx.globalAlpha = 0.1;
             ctx.fillRect(px, py, pw, ph);
@@ -318,7 +342,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!res.ok) throw new Error('Transmission failed');
 
-            // Trigger CRT Blink Out
             crtScreen.classList.add('crt-blink-out');
             
             setTimeout(() => {
