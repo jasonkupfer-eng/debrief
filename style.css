@@ -2733,7 +2733,7 @@ body.workstation-room {
 
 /* Detailed Rotary Dial */
 .phone-dial {
-    position: relative; z-index: 6; width: 55px; height: 55px;
+    position: relative; z-index: 50; width: 55px; height: 55px;
     background: #fff4d9; border: 4px solid #1a1b26; border-radius: 50%;
     display: flex; justify-content: center; align-items: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.4); margin-top: 10px;
