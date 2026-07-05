@@ -2684,7 +2684,7 @@ body.workstation-room {
 .phone-handset {
     display: flex; justify-content: center; align-items: flex-end;
     width: 160px; height: 35px; position: relative; z-index: 12;
-    margin-bottom: -16px; /* Pulls the handset deep down into the cradle */
+    margin-bottom: -12px; /* Pulls handset tightly into the cradle */
 }
 .handset-handle {
     width: 90px; height: 16px; background: #6da4a4; 
@@ -2699,18 +2699,18 @@ body.workstation-room {
 .left-cup { left: 0; transform: rotate(15deg); box-shadow: inset 4px 4px 0 #9fcaca; }
 .right-cup { right: 0; transform: rotate(-15deg); box-shadow: inset -4px 4px 0 #9fcaca; }
 
-/* NEW: The Cradle Prongs */
+/* The Cradle Prongs */
 .phone-cradle {
     width: 50px; height: 12px;
-    background: #4a7a7a; /* Slightly darker recessed color */
+    background: #4a7a7a; 
     border: 4px solid #1a1b26; border-bottom: none;
     border-radius: 4px 4px 0 0;
     position: relative; z-index: 9;
-    margin-bottom: -4px; /* Pulls base up to connect */
+    margin-bottom: -28px; /* Massively increased to bridge the 3D perspective gap! */
 }
 .phone-cradle::before, .phone-cradle::after {
     content: ''; position: absolute;
-    top: -24px; width: 14px; height: 15px;
+    top: -12px; width: 14px; height: 15px;
     background: #6da4a4; border: 4px solid #1a1b26;
     border-bottom: none; border-radius: 4px 4px 0 0;
     box-shadow: inset 0 3px 0 #9fcaca;
@@ -2743,20 +2743,25 @@ body.workstation-room {
     opacity: 0.8; pointer-events: none;
 }
 
-/* Feet & Coiled Cord */
+/* Feet */
 .phone-feet {
     position: absolute; bottom: -5px; width: 90px; height: 10px;
     display: flex; justify-content: space-between; z-index: 5;
 }
 .p-foot { width: 20px; height: 12px; background: #1a1b26; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
 
+/* Solid Layered Cord */
 .phone-cord {
-    position: absolute; left: -35px; bottom: 5px; width: 45px; height: 35px;
-    border-bottom: 6px dotted #6da4a4; /* Changed from dark navy to bright teal */
-    border-left: 6px dotted #6da4a4;   /* Changed from dark navy to bright teal */
-    border-radius: 0 0 0 20px; z-index: 1;
-    /* Uses shadow to give the bright dots thick, 3D volume */
-    filter: drop-shadow(3px 3px 0px #1a1b26) drop-shadow(-1px -1px 0px #9fcaca);
+    position: absolute; left: -30px; bottom: 5px; width: 40px; height: 35px;
+    border-bottom: 10px solid #1a1b26;
+    border-left: 10px solid #1a1b26;
+    border-bottom-left-radius: 20px; z-index: 1;
+}
+.phone-cord::after {
+    content: ''; position: absolute; left: -5px; bottom: -5px; width: 40px; height: 35px;
+    border-bottom: 4px solid #6da4a4;
+    border-left: 4px solid #6da4a4;
+    border-bottom-left-radius: 15px;
 }
 
 /* --- THE POTTED PLANT (RIGHT SIDE) --- */
