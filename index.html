@@ -7,102 +7,122 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=205">
+    <link rel="stylesheet" href="style.css?v=300">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
-<body class="solid-bg hacker-room-bg">
+<body class="workstation-room">
 
-<!-- Animated Background Screens -->
-<div class="ambient-screens"></div>
+<!-- Dynamic JS Canvas for Background Screens -->
+<canvas id="hackerRoomCanvas"></canvas>
 
-<div class="screen-wrapper">
-    <!-- The Tactile Orange Workstation -->
-    <div class="tactile-orange-chassis">
+<div class="physical-desk-environment">
+    <!-- The Desk Surface -->
+    <div class="desk-surface"></div>
+
+    <!-- The Tactile Retro Workstation -->
+    <div class="retro-workstation">
         
-        <!-- Physical Machine Details -->
-        <div class="chassis-vents"></div>
-        <div class="floppy-drive"><div class="floppy-slot"></div><div class="floppy-light"></div></div>
-        <div class="chassis-badge">WY-79 TERMINAL</div>
-
-        <!-- The Green CRT Screen -->
-        <div class="green-terminal-screen" id="debriefScreen">
-            <div class="green-scanlines"></div>
+        <!-- The Main Monitor Chassis -->
+        <div class="retro-monitor-chassis">
+            <div class="monitor-top-vents"></div>
+            <div class="brand-badge">ARCADE OS/2</div>
             
-            <!-- BIG RED ERROR OVERLAY (Hidden by default) -->
-            <div id="criticalErrorOverlay" class="critical-error-overlay">
-                <div class="error-box">
-                    <span class="error-blink">⚠ SYSTEM FAULT ⚠</span><br><br>
-                    MISSING RETURN COORDS [EMAIL]<br>
-                    TRANSMISSION ABORTED.
-                </div>
-            </div>
-
-            <!-- Main Debrief Form -->
-            <div id="debriefForm" class="debrief-container z-2 terminal-mode">
-                
-                <!-- Weyland-Yutani Style Header -->
-                <div class="terminal-header">
-                    <div class="term-line">SYS: MU/TH/ER 6000</div>
-                    <div class="term-line">ENV: SUBTITLE_ARCADE</div>
-                    <h1 class="term-title">DEBRIEF PROTOCOL</h1>
-                </div>
-
-                <!-- Humanity Meter (Star Rating) -->
-                <div class="form-group term-group">
-                    <label class="term-label">> ASSESS HUMANITY LEVELS_</label>
-                    <div class="humanity-meter term-meter" id="humanityMeter">
-                        <span class="pixel-heart term-heart" data-val="1">♥</span>
-                        <span class="pixel-heart term-heart" data-val="2">♥</span>
-                        <span class="pixel-heart term-heart" data-val="3">♥</span>
-                        <span class="pixel-heart term-heart" data-val="4">♥</span>
-                        <span class="pixel-heart term-heart" data-val="5">♥</span>
-                        <!-- The Flawless Badge -->
-                        <div id="flawlessBadge" class="flawless-badge">100% HUMAN</div>
-                    </div>
-                    <div class="rating-text term-rating" id="ratingText">AWAITING INPUT...</div>
-                    <input type="hidden" id="finalRating" value="0">
-                </div>
-
-                <!-- Comm-Log (Text Review) -->
-                <div class="form-group term-group">
-                    <label class="term-label">> TRANSMIT COMM-LOG_</label>
-                    <textarea id="debriefLog" class="term-input" placeholder="[ ENTER MISSION DEBRIEF ]" maxlength="300"></textarea>
+            <div class="monitor-bezel">
+                <div class="crt-glass-screen" id="debriefScreen">
+                    <div class="crt-glare"></div>
+                    <div class="crt-subtle-scanlines"></div>
                     
-                    <div class="term-memory-row">
-                        <span>MEM_USAGE:</span>
-                        <div class="term-memory-bar-container">
-                            <div class="term-memory-bar" id="memoryBar"></div>
+                    <!-- BIG RED ERROR OVERLAY -->
+                    <div id="criticalErrorOverlay" class="critical-error-overlay">
+                        <div class="error-box">
+                            <span class="error-blink">⚠ FATAL EXCEPTION ⚠</span><br><br>
+                            MISSING RETURN COORDS [EMAIL]<br>
+                            TRANSMISSION REJECTED.
                         </div>
                     </div>
-                </div>
 
-                <!-- Dual Input Row -->
-                <div class="term-dual-row">
-                    <div class="form-group term-group">
-                        <label class="term-label">> COORDS [EMAIL]_</label>
-                        <input type="email" id="pilotEmail" class="term-input small-input" placeholder="PILOT@RESISTANCE.COM">
-                    </div>
-                    
-                    <div class="form-group term-group">
-                        <label class="term-label">> ID [INITIALS]_</label>
-                        <input type="text" id="pilotInitials" class="term-input small-input" placeholder="___" maxlength="3">
-                    </div>
-                </div>
+                    <!-- Main Debrief Form -->
+                    <div id="debriefForm" class="legible-terminal z-2">
+                        
+                        <div class="terminal-header">
+                            <div class="term-line">ARCADE MAINFRAME v9.4</div>
+                            <h1 class="term-title">DEBRIEF PROTOCOL</h1>
+                        </div>
 
-                <button id="transmitDebriefBtn" class="term-btn">[ EXECUTE TRANSMISSION ]</button>
+                        <!-- Humanity Meter -->
+                        <div class="form-group term-group">
+                            <label class="term-label">> ASSESS HUMANITY LEVELS_</label>
+                            <div class="humanity-meter term-meter" id="humanityMeter">
+                                <span class="pixel-heart term-heart" data-val="1">♥</span>
+                                <span class="pixel-heart term-heart" data-val="2">♥</span>
+                                <span class="pixel-heart term-heart" data-val="3">♥</span>
+                                <span class="pixel-heart term-heart" data-val="4">♥</span>
+                                <span class="pixel-heart term-heart" data-val="5">♥</span>
+                                <div id="flawlessBadge" class="flawless-badge">100% HUMAN</div>
+                            </div>
+                            <div class="rating-text term-rating" id="ratingText">AWAITING INPUT...</div>
+                            <input type="hidden" id="finalRating" value="0">
+                        </div>
+
+                        <!-- Comm-Log (Text Review) -->
+                        <div class="form-group term-group">
+                            <label class="term-label">> TRANSMIT COMM-LOG_</label>
+                            <textarea id="debriefLog" class="term-input" placeholder="[ ENTER MISSION DEBRIEF ]" maxlength="300"></textarea>
+                            
+                            <!-- Disk Space / Memory Bar -->
+                            <div class="disk-space-container">
+                                <span class="disk-label">DISK_SPACE:</span>
+                                <div class="disk-track">
+                                    <div class="disk-fill" id="memoryBar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dual Input Row -->
+                        <div class="term-dual-row">
+                            <div class="form-group term-group" style="flex: 2;">
+                                <label class="term-label">> COORDS [EMAIL]_</label>
+                                <input type="email" id="pilotEmail" class="term-input" placeholder="PILOT@RESISTANCE.COM">
+                            </div>
+                            <div class="form-group term-group" style="flex: 1;">
+                                <label class="term-label">> ID [INITIALS]_</label>
+                                <input type="text" id="pilotInitials" class="term-input text-center" placeholder="___" maxlength="3">
+                            </div>
+                        </div>
+
+                        <button id="transmitDebriefBtn" class="tactile-terminal-btn">[ EXECUTE TRANSMISSION ]</button>
+                    </div>
+
+                    <!-- Success Screen -->
+                    <div id="debriefSuccess" class="legible-terminal z-2" style="display: none; justify-content: center;">
+                        <h2 class="term-success-title">UPLINK SUCCESSFUL</h2>
+                        <div class="term-line">MISSION LOGGED IN MAINFRAME.</div>
+                        <p class="term-desc" style="margin-top: 30px;">
+                            YOUR TRANSMISSION HAS REACHED HQ.<br><br>THE HUMAN RESISTANCE THANKS YOU.
+                        </p>
+                        <a href="https://thesubtitlearcade.com" class="tactile-terminal-btn" style="text-decoration: none; margin-top: 40px; display: inline-block;">[ RETURN TO BASE ]</a>
+                    </div>
+
+                </div>
             </div>
 
-            <!-- Success Screen (Hidden initially) -->
-            <div id="debriefSuccess" class="debrief-container z-2 terminal-mode" style="display: none; justify-content: center;">
-                <h2 class="term-success-title">UPLINK SUCCESSFUL</h2>
-                <div class="term-line">MISSION LOGGED IN MAINFRAME.</div>
-                <p class="term-desc" style="margin-top: 30px;">
-                    YOUR TRANSMISSION HAS REACHED HQ.<br><br>THE HUMAN RESISTANCE THANKS YOU.
-                </p>
-                <a href="https://thesubtitlearcade.com" class="term-btn" style="text-decoration: none; margin-top: 40px; display: inline-block;">[ RETURN TO BASE ]</a>
+            <div class="monitor-hardware-controls">
+                <div class="hw-knob"></div>
+                <div class="hw-knob"></div>
+                <div class="hw-power-btn" id="powerBtn"></div>
             </div>
-
         </div>
+
+        <!-- The Peripherals -->
+        <div class="peripherals-zone">
+            <!-- Dynamically populated by JS -->
+            <div class="retro-keyboard" id="tactileKeyboard"></div>
+            <div class="retro-mouse">
+                <div class="mouse-btn left"></div>
+                <div class="mouse-btn right"></div>
+            </div>
+        </div>
+
     </div>
 </div>
 
