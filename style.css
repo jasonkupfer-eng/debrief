@@ -2675,103 +2675,120 @@ body.workstation-room {
 .retro-phone {
     left: 8%;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-    filter: drop-shadow(15px 25px 15px rgba(0,0,0,0.9));
+    filter: drop-shadow(10px 15px 10px rgba(0,0,0,0.8));
     transform: scale(1.6);
     transform-origin: bottom center;
 }
 
-/* Huge Handset */
+/* Huge, Ultra-Rounded Handset */
 .phone-handset {
-    display: flex; justify-content: center; align-items: flex-end;
-    width: 160px; height: 35px; position: relative; z-index: 12;
-    margin-bottom: -12px; /* Pulls handset tightly into the cradle */
+    display: flex; justify-content: center; align-items: center;
+    width: 180px; height: 50px; position: relative; z-index: 12;
 }
 .handset-handle {
-    width: 90px; height: 16px; background: #6da4a4; 
-    border: 4px solid #1a1b26; border-radius: 8px 8px 0 0;
-    box-shadow: inset 0 5px 0 #9fcaca; position: absolute; bottom: 15px;
+    width: 90px; height: 20px; background: #72b0b0; 
+    border: 4px solid #1c1824;
+    box-shadow: inset 0 6px 0 #a1d1d1;
+    position: relative; z-index: 2;
 }
 .handset-cup {
-    width: 48px; height: 35px; background: #6da4a4;
-    border: 4px solid #1a1b26; border-radius: 20px 20px 10px 10px;
-    position: absolute; bottom: -5px;
+    width: 55px; height: 50px; background: #72b0b0;
+    border: 4px solid #1c1824;
+    position: absolute; top: 0; z-index: 3;
 }
-.left-cup { left: 0; transform: rotate(15deg); box-shadow: inset 4px 4px 0 #9fcaca; }
-.right-cup { right: 0; transform: rotate(-15deg); box-shadow: inset -4px 4px 0 #9fcaca; }
+.left-cup { 
+    left: 0; border-radius: 35px 20px 20px 35px; /* Replicates the reference curve */
+    box-shadow: inset 5px 6px 0 #a1d1d1, inset -4px -8px 0 #4c7a7a; 
+}
+.right-cup { 
+    right: 0; border-radius: 20px 35px 35px 20px; 
+    box-shadow: inset 5px 6px 0 #a1d1d1, inset 4px -8px 0 #4c7a7a; 
+}
 
-/* The Cradle Prongs */
+/* Cradle Prongs */
 .phone-cradle {
-    width: 50px; height: 12px;
-    background: #4a7a7a; 
-    border: 4px solid #1a1b26; border-bottom: none;
+    width: 60px; height: 16px; position: relative; z-index: 5;
+    display: flex; justify-content: space-between;
+    margin-top: -6px; /* Pulls slightly into the handset handle */
+    margin-bottom: -4px; /* Pulls base up to connect */
+}
+.cradle-prong {
+    width: 16px; height: 20px; background: #72b0b0; border: 4px solid #1c1824;
     border-radius: 4px 4px 0 0;
-    position: relative; 
-    z-index: 7; /* FIXED: Dropped behind the base so the dial safely overlaps it */
-    margin-bottom: -28px;
+    box-shadow: inset 0 4px 0 #a1d1d1;
 }
-.phone-cradle::before, .phone-cradle::after {
-    content: ''; position: absolute;
-    top: -12px; width: 14px; height: 15px;
-    background: #6da4a4; border: 4px solid #1a1b26;
-    border-bottom: none; border-radius: 4px 4px 0 0;
-    box-shadow: inset 0 3px 0 #9fcaca;
-}
-.phone-cradle::before { left: -4px; }
-.phone-cradle::after { right: -4px; }
 
-/* 3D Angled Trapezoid Base */
+/* 2D Stacked Base (Perfect Geometry) */
 .phone-base-wrapper {
-    position: relative; z-index: 8; width: 130px; height: 80px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; z-index: 8; 
+    display: flex; flex-direction: column; align-items: center;
 }
-.phone-body-trapezoid {
-    position: absolute; inset: 0; background: #6da4a4;
-    border: 4px solid #1a1b26; border-radius: 12px;
-    transform: perspective(200px) rotateX(30deg); transform-origin: bottom;
-    box-shadow: inset 0 10px 0 #9fcaca, inset 0 -10px 20px rgba(0,0,0,0.3);
+.phone-base-top {
+    width: 100px; height: 45px; background: #72b0b0;
+    border: 4px solid #1c1824; border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    box-shadow: inset 0 8px 0 #a1d1d1;
+    position: relative; z-index: 2;
+}
+.phone-base-bottom {
+    width: 140px; height: 40px; background: #659c9c; /* Slightly darker to fake the angle */
+    border: 4px solid #1c1824; border-radius: 6px;
+    box-shadow: inset 0 6px 0 #a1d1d1, inset 0 -6px 0 #4c7a7a;
+    position: relative; z-index: 3;
+    display: flex; justify-content: center;
+    margin-top: -4px; /* Eliminates any gap */
+}
+.phone-slot {
+    position: absolute; bottom: 8px; width: 45px; height: 12px;
+    background: #4c7a7a; border: 3px solid #1c1824; border-radius: 4px;
+    box-shadow: inset 0 3px 0 rgba(0,0,0,0.3);
 }
 
-/* Detailed Rotary Dial */
+/* Central Overlapping Dial */
 .phone-dial {
-    position: absolute; /* FIXED: Removes it from the flex flow */
-    top: 15px;          /* Positions it precisely on the phone face */
-    z-index: 12; 
-    width: 55px; height: 55px;
-    background: #fff4d9; border: 4px solid #1a1b26; border-radius: 50%;
+    position: absolute; top: 15px; z-index: 12;
+    width: 68px; height: 68px; background: #fdf2cc;
+    border: 4px solid #1c1824; border-radius: 50%;
     display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.4); 
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3), inset 0 4px 0 #ffffff;
 }
-.dial-inner { width: 22px; height: 22px; background: #fff4d9; border: 3px solid #1a1b26; border-radius: 50%; }
+.dial-inner {
+    width: 26px; height: 26px; background: #fdf2cc;
+    border: 4px solid #1c1824; border-radius: 50%;
+    box-shadow: inset 0 3px 0 #ffffff;
+}
 .dial-holes-ring {
-    position: absolute; inset: 2px; border-radius: 50%; border: 10px dotted #6da4a4;
-    opacity: 0.8; pointer-events: none;
+    position: absolute; inset: 4px;
+    border: 10px dotted #659c9c; border-radius: 50%;
+    opacity: 0.9; pointer-events: none;
+}
+/* The brass finger stop */
+.dial-stop {
+    position: absolute; bottom: 8px; right: 0px;
+    width: 12px; height: 16px; background: #eab464;
+    border: 3px solid #1c1824; border-radius: 4px;
+    transform: rotate(-30deg);
+    box-shadow: inset 0 3px 0 #ffda99;
 }
 
 /* Feet */
 .phone-feet {
-    position: absolute; bottom: -5px; width: 90px; height: 10px;
-    display: flex; justify-content: space-between; z-index: 5;
+    position: absolute; bottom: -8px; width: 100px; height: 10px;
+    display: flex; justify-content: space-between; z-index: 1;
 }
-.p-foot { width: 20px; height: 12px; background: #1a1b26; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
+.p-foot { width: 22px; height: 12px; background: #1c1824; border-radius: 2px; }
 
-/* Pixel-Art Coiled Cord */
+/* Coiled Pixel Cord */
 .phone-cord {
-    position: absolute;
-    left: -16px; 
-    bottom: 18px; 
-    width: 40px; 
-    height: 52px; 
-    border: 7px dotted #6da4a4;
-    border-right: none;
-    border-radius: 20px 0 0 20px;
-    z-index: 1; /* Slides perfectly behind the base and handset to link them */
-    
-    /* Creates a 4-way solid black outline around every single dot */
+    position: absolute; left: -25px; bottom: 10px;
+    width: 35px; height: 65px;
+    border: 7px dotted #72b0b0; border-right: none;
+    border-radius: 25px 0 0 25px; z-index: 1;
     filter: 
-        drop-shadow(2px 0px 0px #1a1b26) 
-        drop-shadow(-2px 0px 0px #1a1b26) 
-        drop-shadow(0px 2px 0px #1a1b26) 
-        drop-shadow(0px -2px 0px #1a1b26);
+        drop-shadow(2px 0px 0px #1c1824) 
+        drop-shadow(-2px 0px 0px #1c1824) 
+        drop-shadow(0px 2px 0px #1c1824) 
+        drop-shadow(0px -2px 0px #1c1824);
 }
 
 /* --- THE POTTED PLANT (RIGHT SIDE) --- */
