@@ -2940,7 +2940,28 @@ body.workstation-room {
 
 /* Hearts & Badges */
 .term-meter { display: flex; align-items: center; position: relative; height: 35px; gap: 8px; cursor: pointer; }
-.term-heart { font-size: 30px !important; color: #0a2910 !important; text-shadow: none !important; transition: all 0.1s; }
+.term-heart { 
+    font-size: 30px !important; 
+    color: #1a5c10 !important; /* Brighter idle color so they stand out */
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.2) !important;
+    transition: all 0.1s; 
+    cursor: pointer;
+    animation: heartIdlePulse 1.5s infinite alternate; /* The new pulse */
+}
+
+@keyframes heartIdlePulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    100% { transform: scale(1.15); filter: brightness(1.5); }
+}
+
+/* Stops the idle pulse once the user clicks and a color class is applied */
+.term-heart.h-red,
+.term-heart.h-orange,
+.term-heart.h-yellow,
+.term-heart.h-chartreuse,
+.term-heart.h-green {
+    animation: none !important; 
+}
 .h-red { color: #ff0000 !important; text-shadow: 0 0 15px #ff0000 !important; transform: scale(1.1); }
 .h-orange { color: #ff9900 !important; text-shadow: 0 0 15px #ff9900 !important; transform: scale(1.1); }
 .h-yellow { color: #ffea00 !important; text-shadow: 0 0 15px #ffea00 !important; transform: scale(1.1); }
@@ -3088,28 +3109,6 @@ body.workstation-room {
         gap: 4px !important;
     }
     
-    .term-heart { 
-    font-size: 30px !important; 
-    color: #1a5c10 !important; /* Brighter idle color so they stand out */
-    text-shadow: 0 0 5px rgba(57, 255, 20, 0.2) !important;
-    transition: all 0.1s; 
-    cursor: pointer;
-    animation: heartIdlePulse 1.5s infinite alternate; /* The new pulse */
-}
-
-@keyframes heartIdlePulse {
-    0% { transform: scale(1); filter: brightness(1); }
-    100% { transform: scale(1.15); filter: brightness(1.5); }
-}
-
-/* Stops the idle pulse once the user clicks and a color class is applied */
-.term-heart.h-red,
-.term-heart.h-orange,
-.term-heart.h-yellow,
-.term-heart.h-chartreuse,
-.term-heart.h-green {
-    animation: none !important; 
-}
 
     /* Moves the 100% Human badge below the hearts so it doesn't overlap */
     .flawless-badge {
