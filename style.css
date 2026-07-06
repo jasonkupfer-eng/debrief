@@ -2847,8 +2847,8 @@ body.workstation-room {
 .retro-workstation {
     position: relative; z-index: 15; 
     display: flex; flex-direction: column; align-items: center;
-    /* This pulls the entire workstation up so the keyboard clears the bottom of the screen */
-    margin-bottom: 8vh; 
+    /* Dropped from 8vh to 2vh to plant the PC base firmly on the desk */
+    margin-bottom: 2vh; 
 }
 
 .retro-monitor-chassis {
@@ -2981,7 +2981,8 @@ body.workstation-room {
 /* --- PERIPHERALS (PULLED UP ONTO DESK) --- */
 .peripherals-zone { 
     display: flex; justify-content: center; align-items: flex-end; gap: 40px; 
-    margin-top: 15px; z-index: 20; 
+    /* Use a negative margin to pull the keyboard closer to the PC base */
+    margin-top: -5px; z-index: 20; 
     transform: perspective(600px) rotateX(20deg) translateY(-10px); 
 }
 .retro-keyboard {
