@@ -3111,4 +3111,30 @@ body.workstation-room {
     .term-success-title {
         font-size: 32px !important;
     }
+
+/* --- DEBRIEF BUTTON & SCREEN GLITCH ANIMATIONS --- */
+
+/* 1. Button Blink Effect */
+.blink-pulse-animation {
+    animation: neonGlowPulse 1.5s infinite alternate !important;
+}
+
+@keyframes neonGlowPulse {
+    0% { color: #ffea00; text-shadow: 0 0 10px #ff7700; transform: scale(1); }
+    50% { color: #00f0ff; text-shadow: 0 0 15px #0077ff; transform: scale(1.05); }
+    100% { color: #ff007f; text-shadow: 0 0 12px #ff0055; transform: scale(1); }
+}
+
+/* 2. Glitch Transition Effect */
+.glitch-crash { 
+    animation: violentGlitchForm 0.4s cubic-bezier(.25,.46,.45,.94) forwards !important; 
+}
+
+@keyframes violentGlitchForm {
+    0% { transform: translate(0) skewX(0); filter: hue-rotate(0deg); }
+    20% { transform: translate(-10px, 5px) skewX(10deg); filter: hue-rotate(90deg) invert(1); }
+    40% { transform: translate(10px, -5px) skewX(-10deg); filter: hue-rotate(180deg); }
+    60% { transform: translate(-5px, 10px) skewX(5deg); filter: hue-rotate(270deg) invert(1); }
+    80% { transform: translate(10px, -10px) skewX(-5deg); filter: hue-rotate(360deg); }
+    100% { transform: translate(0) skewX(0); filter: none; }
 }
