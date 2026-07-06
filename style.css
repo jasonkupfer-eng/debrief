@@ -3111,6 +3111,7 @@ body.workstation-room {
     .term-success-title {
         font-size: 32px !important;
     }
+}
 
 /* --- DEBRIEF BUTTON & SCREEN GLITCH ANIMATIONS --- */
 
@@ -3137,4 +3138,17 @@ body.workstation-room {
     60% { transform: translate(-5px, 10px) skewX(5deg); filter: hue-rotate(270deg) invert(1); }
     80% { transform: translate(10px, -10px) skewX(-5deg); filter: hue-rotate(360deg); }
     100% { transform: translate(0) skewX(0); filter: none; }
+}
+
+/* --- MULTICOLOR BUTTON PULSE --- */
+.rainbow-pulse-btn {
+    animation: neonHueCycle 1.2s infinite steps(4) !important;
+}
+
+@keyframes neonHueCycle {
+    0% { filter: hue-rotate(0deg) drop-shadow(0 0 5px rgba(57,255,20,0.8)); }       /* Green */
+    25% { filter: hue-rotate(90deg) drop-shadow(0 0 5px rgba(0,240,255,0.8)); }     /* Cyan */
+    50% { filter: hue-rotate(180deg) drop-shadow(0 0 5px rgba(255,0,127,0.8)); }    /* Pink */
+    75% { filter: hue-rotate(270deg) drop-shadow(0 0 5px rgba(255,234,0,0.8)); }    /* Yellow */
+    100% { filter: hue-rotate(360deg) drop-shadow(0 0 5px rgba(57,255,20,0.8)); }   /* Back to Green */
 }
