@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         heart.addEventListener('mouseleave', () => {
             if (currentRating === 0) {
-                ratingText.innerText = "AWAITING INPUT...";
+                ratingText.innerText = "[ CLICK HEARTS TO RATE ]";
                 hearts.forEach(h => h.className = 'pixel-heart term-heart');
             } else {
                 ratingText.innerText = ratingData[currentRating - 1].msg;
