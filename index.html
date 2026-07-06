@@ -80,7 +80,19 @@
                         </div>
                     </div>
 
-                    <div id="debriefForm" class="legible-terminal z-2">
+                    <!-- NEW: The Glitchy Start Screen -->
+                    <div id="debriefStartScreen" class="legible-terminal z-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
+                        <div class="wy-sun" style="font-size: 40px; margin-bottom: 20px; color: var(--neon-green); animation: spin 10s linear infinite; text-shadow: 0 0 15px var(--neon-green);">☀</div>
+                        <h2 style="font-family: 'Press Start 2P', monospace; font-size: 16px; color: var(--neon-cyan); margin-bottom: 40px; line-height: 1.5; text-shadow: 2px 2px 0px #000, 0 0 8px var(--neon-cyan);">INCOMING TRANSMISSION...</h2>
+                        
+                        <button id="initiateDebriefBtn" class="tactile-terminal-btn" style="font-size: 18px !important; padding: 25px 15px !important; box-shadow: 0 0 15px rgba(57,255,20,0.4); animation: neonGlowPulse 1.5s infinite alternate;">
+                            [ RATE & JOIN LEADERBOARD! ]
+                        </button>
+                    </div>
+
+                    <!-- HIDE THE FORM INITIALLY with style="display: none;" -->
+                    <div id="debriefForm" class="legible-terminal z-2" style="display: none;">
+                        
                         <div class="wy-header">
                             <div class="wy-stats">
                                 <div>SYS_V 9.4</div>
@@ -115,6 +127,7 @@
                             <div class="form-group term-group">
                                 <label class="term-label">> TRANSMIT COMM-LOG_</label>
                                 <textarea id="debriefLog" class="term-input" placeholder="[ ENTER MISSION DEBRIEF ]" maxlength="300"></textarea>
+                                
                                 <div class="disk-space-container">
                                     <span class="disk-label">DISK_SPACE:</span>
                                     <div class="disk-track"><div class="disk-fill" id="memoryBar"></div></div>
@@ -127,7 +140,8 @@
                                     <input type="email" id="pilotEmail" class="term-input" placeholder="PILOT@RESISTANCE.COM">
                                 </div>
                                 <div class="form-group term-group" style="flex: 1;">
-                                    <label class="term-label">> ID [INITIALS]_</label>
+                                    <!-- RENAMED TO LEADERBOARD INITIALS -->
+                                    <label class="term-label">> LEADERBOARD INITIALS_</label>
                                     <input type="text" id="pilotInitials" class="term-input text-center" placeholder="___" maxlength="3">
                                 </div>
                             </div>
@@ -186,5 +200,35 @@
         </div>
 
     </div> </div> <script src="debrief.js"></script>
+
+<!-- GLITCH TRANSITION LOGIC -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const startBtn = document.getElementById('initiateDebriefBtn');
+        
+        if (startBtn) {
+            startBtn.addEventListener('click', function() {
+                const crtScreen = document.getElementById('debriefScreen');
+                const startScreen = document.getElementById('debriefStartScreen');
+                const formScreen = document.getElementById('debriefForm');
+                
+                // 1. Trigger the violent CRT glitch
+                crtScreen.classList.add('glitch-crash');
+                
+                // 2. Wait exactly 200ms (the middle of the 0.4s glitch) to swap the UI
+                setTimeout(() => {
+                    startScreen.style.display = 'none';
+                    formScreen.style.display = 'flex';
+                }, 200);
+                
+                // 3. Remove the glitch class after it finishes so the screen settles
+                setTimeout(() => {
+                    crtScreen.classList.remove('glitch-crash');
+                }, 500);
+            });
+        }
+    });
+
+</script>
 </body>
 </html>
