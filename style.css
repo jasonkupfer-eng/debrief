@@ -2984,9 +2984,113 @@ body.workstation-room {
 .mouse-btn { flex: 1; height: 35px; background: #e0ded1; border-radius: 20px 20px 2px 2px; box-shadow: 0 3px 0 #9c9a8d, inset 0 2px 2px #fff; }
 .mouse-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #9c9a8d; }
 
+/* =========================================
+   MOBILE OPTIMIZATION (TACTICAL DATAPAD)
+   ========================================= */
 @media (max-width: 768px) {
-    .retro-monitor-chassis { width: 100vw; border-radius: 0; padding: 10px; border: none; margin-bottom: 0; height: 100vh; }
-    .pc-base-unit, .peripherals-zone, .desk-surface { display: none; }
-    .crt-glass-screen { height: 100%; }
-    .term-dual-row { flex-direction: column; gap: 8px; }
+    /* 1. Reset the room to dynamic viewport height */
+    body.workstation-room {
+        height: 100dvh !important;
+    }
+
+    /* 2. Hide all the heavy 3D desk components */
+    .pc-base-unit, 
+    .peripherals-zone, 
+    .desk-surface, 
+    .desk-prop { 
+        display: none !important; 
+    }
+
+    /* 3. Strip the monitor margins so it fills the screen */
+    .retro-workstation {
+        margin: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+    }
+
+    /* 4. Flatten the chassis into a flush bezel */
+    .retro-monitor-chassis { 
+        width: 100% !important; 
+        height: 100% !important;
+        max-width: none !important;
+        border-radius: 0 !important; 
+        padding: 8px !important; 
+        border: none !important; 
+    }
+
+    .monitor-bezel {
+        padding: 10px !important;
+        height: 100% !important;
+        border-radius: 8px !important;
+    }
+
+    /* 5. THE FIX: Enable internal scrolling on the CRT Glass */
+    .crt-glass-screen { 
+        height: 100% !important; 
+        overflow-y: auto !important; /* This allows the form to scroll! */
+        padding: 15px !important;
+        display: block !important; /* Removes flex constraints that crush content */
+    }
+
+    /* Add a retro scrollbar for the CRT screen */
+    .crt-glass-screen::-webkit-scrollbar { width: 6px; }
+    .crt-glass-screen::-webkit-scrollbar-track { background: #020502; border-left: 1px solid #1a5c10; }
+    .crt-glass-screen::-webkit-scrollbar-thumb { background: #39ff14; }
+
+    /* 6. Form Alignment & Stacking for Narrow Screens */
+    .term-dual-row { 
+        flex-direction: column !important; 
+        gap: 15px !important; 
+    }
+    
+    .wy-header {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+        text-align: center !important;
+        position: relative !important;
+    }
+
+    .wy-logo-block {
+        order: -1; /* Pushes the Subtitle Arcade logo to the very top */
+    }
+
+    .wy-sun {
+        position: absolute !important;
+        top: 0px !important;
+        right: 0px !important;
+        font-size: 20px !important;
+    }
+
+    /* 7. Fit the Humanity Meter on one line */
+    .term-meter {
+        justify-content: space-between !important;
+        height: auto !important;
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+    
+    .term-heart {
+        font-size: 26px !important;
+    }
+
+    /* Moves the 100% Human badge below the hearts so it doesn't overlap */
+    .flawless-badge {
+        position: relative !important;
+        margin-top: 10px !important;
+        width: 100% !important;
+        text-align: center !important;
+        transform: none !important;
+    }
+    .flawless-badge.show {
+        animation: none !important; /* Disables the slide-in pop on mobile */
+    }
+    
+    .disk-space-container {
+        justify-content: flex-start !important;
+    }
+
+    .term-success-title {
+        font-size: 32px !important;
+    }
 }
