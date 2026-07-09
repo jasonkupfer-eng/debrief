@@ -63,10 +63,6 @@ html, body {
     background: linear-gradient(rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0.35) 50%);
     background-size: 100% 4px;
     pointer-events: none;
-    
-    /* THE FIX: Force the GPU to handle this massive transparent overlay */
-    transform: translateZ(0);
-    will-change: transform;
 }
 
 .z-1 { z-index: 1; }
@@ -86,36 +82,11 @@ html, body {
     overflow-x: hidden;
 }
 
-/* Custom Arcade Scrollbar for SPA Layers and Inner Content Zones */
-.spa-layer::-webkit-scrollbar,
-.intel-content-zone::-webkit-scrollbar,
-.payment-focal-zone::-webkit-scrollbar { 
-    width: 12px; /* Widened slightly for better grip */
-}
-
-/* 1. Paint the empty track to look like a glowing groove */
-.spa-layer::-webkit-scrollbar-track,
-.intel-content-zone::-webkit-scrollbar-track,
-.payment-focal-zone::-webkit-scrollbar-track { 
-    background: rgba(0, 240, 255, 0.03); 
-    border-left: 1px solid rgba(0, 240, 255, 0.15); 
-}
-
-/* 2. Give the thumb a permanent bright "Neon Pink" state so it cannot be missed */
-.spa-layer::-webkit-scrollbar-thumb,
-.intel-content-zone::-webkit-scrollbar-thumb,
-.payment-focal-zone::-webkit-scrollbar-thumb { 
-    background: var(--neon-pink); 
-    border-radius: 4px; 
-    border: 2px solid #111; 
-}
-
-/* 3. Shift colors aggressively on hover */
-.spa-layer::-webkit-scrollbar-thumb:hover,
-.intel-content-zone::-webkit-scrollbar-thumb:hover,
-.payment-focal-zone::-webkit-scrollbar-thumb:hover { 
-    background: var(--neon-cyan); 
-}
+/* Custom Arcade Scrollbar for SPA Layers */
+.spa-layer::-webkit-scrollbar { width: 10px; }
+.spa-layer::-webkit-scrollbar-track { background: transparent; }
+.spa-layer::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; border: 1px solid #111; }
+.spa-layer::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
 
 .spa-layer.active-layer { display: flex !important; }
 
@@ -261,18 +232,11 @@ html, body {
 .menu-item-text { font-size: 16px; color: #fff; font-family: 'Press Start 2P', monospace; text-shadow: var(--text-shield); font-weight: bold; }
 .menu-item-desc { font-family: 'VT323', monospace; font-size: 26px; color: var(--neon-green); text-shadow: var(--text-shield); margin-left: auto; font-weight: bold; }
 
-/* --- UNIVERSAL ACTIVE STATE (Works on Tablets & Desktop) --- */
-.menu-item.active { background: rgba(57, 255, 20, 0.15); border: 1px solid rgba(57, 255, 20, 0.3); }
-.menu-item.active .pointer { visibility: visible; }
-.menu-item.active .menu-item-text { color: var(--neon-cyan); text-shadow: var(--text-shield), 0 0 8px var(--neon-cyan); }
-.menu-item.active .menu-item-desc { color: #ffffff; text-shadow: var(--text-shield), 0 0 8px var(--neon-green); }
-
-/* --- MOUSE-ONLY HOVER STATE --- */
 @media (hover: hover) {
-    .menu-item:hover { background: rgba(57, 255, 20, 0.15); border: 1px solid rgba(57, 255, 20, 0.3); }
-    .menu-item:hover .pointer { visibility: visible; }
-    .menu-item:hover .menu-item-text { color: var(--neon-cyan); text-shadow: var(--text-shield), 0 0 8px var(--neon-cyan); }
-    .menu-item:hover .menu-item-desc { color: #ffffff; text-shadow: var(--text-shield), 0 0 8px var(--neon-green); }
+    .menu-item:hover, .menu-item.active { background: rgba(57, 255, 20, 0.15); border: 1px solid rgba(57, 255, 20, 0.3); }
+    .menu-item:hover .pointer, .menu-item.active .pointer { visibility: visible; }
+    .menu-item:hover .menu-item-text, .menu-item.active .menu-item-text { color: var(--neon-cyan); text-shadow: var(--text-shield), 0 0 8px var(--neon-cyan); }
+    .menu-item:hover .menu-item-desc, .menu-item.active .menu-item-desc { color: #ffffff; text-shadow: var(--text-shield), 0 0 8px var(--neon-green); }
 }
 
 .menu-item:active { background: rgba(57, 255, 20, 0.15) !important; border: 1px solid rgba(57, 255, 20, 0.3) !important; }
@@ -693,32 +657,23 @@ html, body {
    ======================================================== */
 #formatInterface { overflow: hidden !important; }
 
-/* The Quarantined Video Feedback Matrix (GPU OPTIMIZED) */
+/* The Quarantined Video Feedback Matrix */
 .pixel-matrix-bg {
     position: absolute; 
-    /* Oversize the background so we can slide it around without running out of edges */
-    top: -20%; left: -20%; width: 140%; height: 140%; z-index: 0;
+    top: -10%; left: -10%; width: 120%; height: 120%; z-index: 0;
     pointer-events: none;
     background-color: #000;
     
     background-image: 
         repeating-linear-gradient(0deg, rgba(0,0,0,0.85) 0px, rgba(0,0,0,0.85) 4px, transparent 4px, transparent 8px),
-        repeating-linear-gradient(90deg, rgba(255, 0, 127, 0.4) 0%, rgba(0, 240, 255, 0.4) 30%, rgba(57, 255, 20, 0.4) 60%, rgba(255, 234, 0, 0.4) 100%);
-    background-size: 50% 50%, 100% 100%;
+        url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.45"/></svg>'),
+        repeating-linear-gradient(90deg, rgba(255, 0, 127, 0.6) 0%, rgba(255, 0, 127, 0.6) 15%, rgba(0, 240, 255, 0.6) 15%, rgba(0, 240, 255, 0.6) 30%, rgba(57, 255, 20, 0.6) 30%, rgba(57, 255, 20, 0.6) 50%, rgba(255, 234, 0, 0.6) 50%, rgba(255, 234, 0, 0.6) 70%, rgba(138, 43, 226, 0.6) 70%, rgba(138, 43, 226, 0.6) 100%);
+    background-size: 100% 100%, 100% 100%, 200% 100%;
     
-    filter: none !important; /* Force kill any remaining blurs */
-    
-    /* Hardware accelerated 3D transform animation */
-    animation: hardwareAcceleratedPan 20s linear infinite alternate;
-    transform: translateZ(0); 
-    will-change: transform;
+    /* DOUBLE BLUR FOR LEGIBILITY */
+    filter: blur(12px) contrast(1.5) saturate(2.5); 
+    animation: jitterBarMorph 10s steps(100) infinite alternate;
 }
-
-@keyframes hardwareAcceleratedPan {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(8%, 4%, 0); }
-}
-   
 
 .matrix-scanline-laser {
     position: absolute; top: -10%; left: 0; width: 100%; height: 15px; z-index: 1; pointer-events: none;
@@ -742,25 +697,6 @@ html, body {
 @keyframes laserScanDown {
     0% { transform: translateY(-10vh); }
     100% { transform: translateY(110vh); }
-}
-
-/* ========================================================
-   HARDWARE ACCELERATED SCROLL BOX
-   ======================================================== */
-.format-scroll-box {
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    overflow-y: auto; 
-    overflow-x: hidden;
-    z-index: 2;
-    
-    /* THE FIX: Forces the scroll area onto the GPU and stops repaints */
-    transform: translateZ(0);
-    -webkit-overflow-scrolling: touch;
-    will-change: scroll-position, transform;
 }
 
 /* Custom Arcade Scrollbar for the Inner Box */
@@ -1327,17 +1263,12 @@ width: 100% !important;      /* Forces the text span to fill the width */
 
 /* 1. The Base Photo Background */
 .dreamy-bg {
-    position: fixed !important; /* THE FIX: Locks the background to the screen so it won't scroll away */
-    top: -5%; 
-    left: -5%; 
-    width: 110%; 
-    height: 110%;
+    position: absolute; top: -5%; left: -5%; width: 110%; height: 110%;
     background-color: #0a1118; 
     background-image: url('stock-photo-glitch-art-scan-line-background-scan-line-monitor-old-technology.jpg');
     background-size: cover;
     background-position: center;
-    z-index: 0; 
-    pointer-events: none;
+    z-index: 0; pointer-events: none;
     opacity: 0.85; 
     animation: slowPhotoPan 10s ease-in-out infinite alternate;
 }
@@ -1355,16 +1286,7 @@ width: 100% !important;      /* Forces the text span to fill the width */
 }
 
 /* The Steel Desk */
-.workbench { 
-    display: flex; 
-    justify-content: center; /* <--- THIS CENTERS THE MONITORS */
-    gap: 50px; 
-    margin-top: 40px; 
-    padding-bottom: 20px; 
-    border-bottom: 8px solid #222; 
-    perspective: 1000px; 
-    z-index: 5; 
-}
+.workbench { display: flex; gap: 50px; margin-top: 40px; padding-bottom: 20px; border-bottom: 8px solid #222; perspective: 1000px; z-index: 5; }
 
 .monitor-container {
     width: 420px; height: 350px; background: #1a1a1a; border: 4px solid #2a2a2a; border-radius: 15px 15px 5px 5px; padding: 15px;
@@ -1798,25 +1720,14 @@ width: 100% !important;      /* Forces the text span to fill the width */
 .synth-popup-box {
     position: relative; 
     width: 85vw; max-width: 1100px; 
-    
-    /* THE FIX: Allow it to grow, but scroll if it hits the screen edge */
-    height: auto !important; 
-    min-height: 650px !important;
-    max-height: 90vh !important; 
-    overflow-y: auto !important; 
-    overflow-x: hidden !important;
-    
+    height: 70vh; max-height: 750px;
     background: #020005; 
     border: 6px solid var(--neon-pink); 
     border-radius: 12px;
     box-shadow: 0 0 50px rgba(255, 0, 127, 0.4), 0 20px 40px rgba(0,0,0,0.9);
+    overflow: hidden; 
     transform: translate(0,0); transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-
-/* Add a custom retro scrollbar for short screens so it matches the theme */
-.synth-popup-box::-webkit-scrollbar { width: 10px; }
-.synth-popup-box::-webkit-scrollbar-track { background: rgba(15, 0, 25, 0.8); border-left: 2px solid var(--neon-pink); }
-.synth-popup-box::-webkit-scrollbar-thumb { background: var(--neon-pink); border-radius: 2px; }
 
 /* Reduced Ambient Cruising */
 .cockpit-turbulence { animation: gentleCruise 3s ease-in-out infinite alternate; }
@@ -1852,15 +1763,19 @@ width: 100% !important;      /* Forces the text span to fill the width */
 .seat-left { left: -10px; border-radius: 60px 20px 0 0; transform: perspective(800px) rotateY(20deg); }
 .seat-right { right: -10px; border-radius: 20px 60px 0 0; transform: perspective(800px) rotateY(-20deg); }
 
-/* 3D Angled Dashboard (OPTIMIZED) */
+/* 3D Angled Dashboard */
+.synth-dashboard-wrapper {
+    position: absolute; bottom: -10px; left: 0; width: 100%; height: 42%; min-height: 250px;
+    perspective: 1200px; pointer-events: none; display: flex; justify-content: center;
+}
+
 .heavy-machinery-angled {
     width: 85%; height: 100%; 
     transform: rotateX(35deg); transform-origin: bottom center;
     background-color: #559e7a;
-    
-    /* Stripped the SVG noise. Kept the clean metallic gradient. */
-    background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.3) 100%);
-    
+    background-image: 
+        url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.12" style="mix-blend-mode: multiply;"/></svg>'),
+        linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.3) 100%);
     border: 10px solid #28573f; border-bottom: none; border-radius: 16px 16px 0 0; 
     padding: 20px; display: flex; justify-content: space-between; gap: 15px;
     box-shadow: inset 0 20px 40px rgba(0,0,0,0.9), 0 -20px 50px rgba(0,240,255,0.2);
@@ -2040,17 +1955,15 @@ width: 100% !important;      /* Forces the text span to fill the width */
     /* Shrink the monitors to fit mobile width */
     .workbench { 
         width: 100% !important;
-        gap: 40px !important;           /* Increased from 20px so they aren't so close */
-        margin-top: 20px !important;    /* Added a bit more space at the top */
-        align-items: center !important; /* Forces them to stay centered in the column */
+        gap: 20px !important; 
+        margin-top: 10px !important; 
     }
     
     .monitor-container { 
-        width: 92% !important;          /* Shrunk from 100% so they aren't stretched edge-to-edge */
-        max-width: 380px !important;    /* Caps the width on iPads/Large phones */
+        width: 100% !important; 
         height: auto !important; 
-        min-height: 320px !important;   /* Lowered slightly so they aren't artificially tall */
-        padding: 15px !important;
+        min-height: 340px !important; 
+        padding: 10px !important;
     }
 
     /* --- FORMAT DATABASE MOBILE FIXES --- */
@@ -2070,6 +1983,13 @@ width: 100% !important;      /* Forces the text span to fill the width */
         object-fit: cover !important; 
     }
 
+/* Make the System Settings Hub scrollable on mobile */
+    #systemSettingsHub {
+        justify-content: flex-start !important;
+        overflow-y: auto !important;
+        padding-top: 20px !important;
+        padding-bottom: 80px !important; /* Gives plenty of room below the bottom monitor */
+    }
 }
 
 /* =========================================
@@ -2233,36 +2153,23 @@ width: 100% !important;      /* Forces the text span to fill the width */
 .reverse-row .mini-arcade-container { transform: perspective(800px) rotateY(-15deg); }
 .mini-arcade-container:hover { transform: perspective(800px) rotateY(0deg) scale(1.08); z-index: 10; }
 
-/* --- FLICKERING SOLID MARQUEES (RESTORED NEON + GPU SANDBOX) --- */
+/* --- FLICKERING SOLID MARQUEES --- */
 .mini-arcade-marquee {
     width: calc(100% + 16px); 
-    margin: 0 -8px 15px -8px; 
+    margin: 0 -8px 15px -8px; /* FIXED: Removed the -28px top margin that was causing the clip */
     padding: 15px 0;
     text-align: center; font-family: 'Press Start 2P', monospace; font-size: 12px;
     border-radius: 8px 8px 0 0; border: 4px solid #111;
     background-color: #1a1a1a !important; 
+    color: #fff;
     position: relative;
     z-index: 10;
-    
-    /* THE FIX: Sandboxes the heavy shadow math onto its own GPU layer */
-    transform: translateZ(0);
-    will-change: box-shadow, text-shadow, color;
 }
 
-.cyan-marquee { 
-    border-color: #005f66; 
-    animation: flickerCyan 4s infinite alternate; 
-}
-.pink-marquee { 
-    border-color: #660033; 
-    animation: flickerPink 3.5s infinite alternate; 
-}
-.green-marquee { 
-    border-color: #1a660a; 
-    animation: flickerGreen 5s infinite alternate; 
-}
+.cyan-marquee { color: var(--neon-cyan); border-color: #005f66; animation: flickerCyan 4s infinite alternate; }
+.pink-marquee { color: var(--neon-pink); border-color: #660033; animation: flickerPink 3.5s infinite alternate; }
+.green-marquee { color: var(--neon-green); border-color: #1a660a; animation: flickerGreen 5s infinite alternate; }
 
-/* Restored original authentic neon math */
 @keyframes flickerCyan {
     0%, 20%, 24%, 55%, 58%, 82%, 84%, 88%, 90%, 96%, 98%, 100% { 
         text-shadow: 0 0 8px var(--neon-cyan); 
@@ -2652,72 +2559,611 @@ width: 100% !important;      /* Forces the text span to fill the width */
 }
 
 /* =========================================
-   MISSION DEBRIEF PAGE STYLES
+   64-BIT TACTILE WORKSTATION DEBRIEF
    ========================================= */
-.debrief-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    height: 100%;
-    overflow-y: auto;
-}
 
-/* Humanity Meter (Hearts) */
-.humanity-meter {
-    display: flex;
-    gap: 15px;
-    margin: 15px 0 10px 0;
-    cursor: pointer;
-}
-
-.pixel-heart {
-    font-size: 40px;
-    color: #333; /* Dead heart */
-    text-shadow: inset 2px 2px 5px #000;
-    transition: all 0.1s ease;
-    user-select: none;
-}
-
-.pixel-heart.active, .pixel-heart.hover-active {
-    color: var(--neon-green);
-    text-shadow: 0 0 15px var(--neon-green), 0 0 30px var(--neon-green);
-    transform: scale(1.1);
-}
-
-.pixel-heart.error-flash {
-    color: var(--neon-pink);
-    text-shadow: 0 0 15px var(--neon-pink);
-    animation: alertShake 0.4s ease-in-out;
-}
-
-.rating-text {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
-    color: #888;
-    height: 10px;
-}
-
-/* Memory Bar (Character Count) */
-.memory-bar-container {
-    width: 200px;
-    height: 8px;
-    background: #111;
-    border: 2px solid #333;
-    border-radius: 4px;
+body.workstation-room {
+    background-color: #030406 !important;
+    position: relative;
     overflow: hidden;
+    margin: 0; padding: 0;
+    width: 100vw; height: 100vh;
 }
 
-.memory-bar {
-    height: 100%;
-    width: 0%;
-    background: var(--neon-green);
-    transition: width 0.2s ease, background-color 0.2s ease;
+#hackerRoomCanvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 1;
 }
 
-/* Form Shake Animation */
+/* 3D Desk Environment */
+.physical-desk-environment {
+    position: relative; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    z-index: 10;
+}
+
+.desk-surface {
+    position: absolute; bottom: 0; left: -10%; width: 120%; height: 25vh;
+    background: #2a1610;
+    background-image: linear-gradient(to bottom, #140a07, #2a1610 30%, #0a0503);
+    border-top: 6px solid #000;
+    transform: perspective(600px) rotateX(45deg);
+    transform-origin: bottom; z-index: 1;
+    box-shadow: 0 -80px 150px rgba(57, 255, 20, 0.15);
+}
+
+/* =========================================
+   64-BIT TACTILE WORKSTATION DEBRIEF
+   ========================================= */
+
+body.workstation-room {
+    background-color: #030406 !important;
+    position: relative;
+    overflow: hidden; /* Prevents scrolling */
+    margin: 0; padding: 0;
+    width: 100vw; height: 100vh;
+}
+
+#hackerRoomCanvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 1;
+}
+
+/* 3D Desk Environment */
+.physical-desk-environment {
+    position: relative; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    z-index: 10;
+}
+
+.desk-surface {
+    position: absolute; bottom: 0; left: -10%; width: 120%; height: 30vh;
+    background: #2a1610;
+    background-image: linear-gradient(to bottom, #140a07, #2a1610 30%, #0a0503);
+    border-top: 6px solid #000;
+    transform: perspective(600px) rotateX(45deg);
+    transform-origin: bottom; z-index: 1;
+    box-shadow: 0 -80px 150px rgba(57, 255, 20, 0.15);
+}
+
+/* =========================================
+   64-BIT TACTILE WORKSTATION DEBRIEF
+   ========================================= */
+
+body.workstation-room {
+    background-color: #030406 !important;
+    position: relative;
+    overflow: hidden; 
+    margin: 0; padding: 0;
+    width: 100vw; height: 100vh;
+}
+
+#hackerRoomCanvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 1;
+}
+
+/* 3D Desk Environment */
+.physical-desk-environment {
+    position: relative; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    z-index: 10;
+}
+
+.desk-surface {
+    position: absolute; bottom: 0; left: -10%; width: 120%; height: 35vh;
+    background: #2a1610;
+    background-image: linear-gradient(to bottom, #140a07, #2a1610 30%, #0a0503);
+    border-top: 6px solid #000;
+    transform: perspective(600px) rotateX(45deg);
+    transform-origin: bottom; z-index: 1;
+    box-shadow: 0 -80px 150px rgba(57, 255, 20, 0.15);
+}
+
+/* =========================================
+   8-BIT DESK PROPS (PHONE & PLANT)
+   ========================================= */
+
+.desk-prop {
+    position: absolute;
+    bottom: 8vh; /* Perfectly grounded on the 3D desk */
+    z-index: 5;
+    transform-style: preserve-3d;
+}
+
+/* --- THE VINTAGE ROTARY PHONE --- */
+.retro-phone {
+    left: 6%;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    filter: drop-shadow(10px 15px 10px rgba(0,0,0,0.8));
+    transform: scale(1.6);
+    transform-origin: bottom center;
+}
+
+/* Reference-Accurate Handset */
+.phone-handset {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    width: 150px; height: 42px; position: relative; z-index: 12;
+    margin-bottom: -5px; /* Sits in cradle */
+}
+.handset-bridge {
+    position: absolute; top: 0; left: 25px; right: 25px; height: 18px;
+    background: #71a8a6; border: 4px solid #1a1625; border-bottom: none;
+    border-radius: 8px 8px 0 0; box-shadow: inset 0 6px 0 #a9d4d4;
+    z-index: 1;
+}
+.handset-cup {
+    width: 52px; height: 42px; background: #71a8a6;
+    border: 4px solid #1a1625; position: relative; z-index: 2;
+}
+/* Asymmetrical teardrops to fix the "barbell" */
+.left-cup { 
+    border-radius: 30px 12px 12px 25px; 
+    box-shadow: inset 4px 6px 0 #a9d4d4, inset -4px -6px 0 #4c7a7a; 
+}
+.right-cup { 
+    border-radius: 12px 30px 25px 12px; 
+    box-shadow: inset -4px 6px 0 #a9d4d4, inset 4px -6px 0 #4c7a7a; 
+}
+
+/* Cradle Prongs */
+.phone-cradle {
+    width: 60px; height: 16px; position: relative; z-index: 5;
+    display: flex; justify-content: space-between;
+    margin-bottom: -4px; /* Pulls base up */
+}
+.cradle-prong {
+    width: 16px; height: 18px; background: #71a8a6; border: 4px solid #1a1625;
+    border-radius: 4px 4px 0 0; box-shadow: inset 0 4px 0 #a9d4d4;
+}
+
+/* 2D Stacked Base */
+.phone-base-wrapper {
+    position: relative; z-index: 8; 
+    display: flex; flex-direction: column; align-items: center;
+}
+.phone-base-top {
+    width: 90px; height: 25px; background: #71a8a6;
+    border: 4px solid #1a1625; border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    box-shadow: inset 0 6px 0 #a9d4d4;
+}
+.phone-base-bottom {
+    width: 140px; height: 45px; background: #71a8a6; 
+    border: 4px solid #1a1625; border-radius: 6px;
+    box-shadow: inset 0 6px 0 #a9d4d4, inset 0 -8px 0 #4c7a7a;
+    position: relative; display: flex; justify-content: center;
+    margin-top: -4px; /* Eliminates gap */
+}
+
+/* Base Details */
+.phone-slot {
+    position: absolute; bottom: 8px; width: 45px; height: 12px;
+    background: #4c7a7a; border: 3px solid #1a1625; border-radius: 4px;
+    box-shadow: inset 0 3px 0 rgba(0,0,0,0.3);
+}
+
+/* High-Mounted Overlapping Dial */
+.phone-dial {
+    position: absolute; 
+    top: -24px; /* <--- PUSHES IT HIGH ABOVE THE BASE LINE */
+    z-index: 12;
+    width: 64px; height: 64px; background: #fff1d0;
+    border: 4px solid #1a1625; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2), inset 0 4px 0 #ffffff;
+}
+.dial-inner {
+    width: 24px; height: 24px; background: #fff1d0;
+    border: 4px solid #1a1625; border-radius: 50%;
+    box-shadow: inset 0 3px 0 #ffffff;
+}
+.dial-holes-ring {
+    position: absolute; inset: 4px;
+    border: 10px dotted #659c9c; border-radius: 50%;
+    opacity: 0.9; pointer-events: none;
+}
+.dial-stop {
+    position: absolute; bottom: 6px; right: -2px;
+    width: 14px; height: 16px; background: #edb458;
+    border: 3px solid #1a1625; border-radius: 4px;
+    transform: rotate(-35deg);
+    box-shadow: inset 0 3px 0 #ffda99;
+}
+
+/* Feet */
+.phone-feet {
+    position: absolute; bottom: -8px; width: 100px; height: 10px;
+    display: flex; justify-content: space-between; z-index: 1;
+}
+.p-foot { width: 22px; height: 12px; background: #1a1625; border-radius: 2px; }
+
+/* Coiled Pixel Cord */
+.phone-cord {
+    position: absolute; left: -25px; bottom: 15px;
+    width: 35px; height: 65px;
+    border: 7px dotted #71a8a6; border-right: none;
+    border-radius: 25px 0 0 25px; z-index: 1;
+    filter: 
+        drop-shadow(3px 0px 0px #1a1625) 
+        drop-shadow(-3px 0px 0px #1a1625) 
+        drop-shadow(0px 3px 0px #1a1625) 
+        drop-shadow(0px -3px 0px #1a1625);
+}
+
+/* --- THE POTTED PLANT (RIGHT SIDE) --- */
+.retro-plant {
+    right: 8%;
+    display: flex; flex-direction: column; align-items: center;
+    filter: drop-shadow(-15px 25px 15px rgba(0,0,0,0.9));
+    transform: scale(2.2); /* Massive scale */
+    transform-origin: bottom center;
+}
+
+.plant-pot { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 5; }
+
+.pot-rim {
+    width: 60px; height: 14px; background: #e76f51; border: 3px solid #111;
+    border-radius: 4px; z-index: 2; position: relative;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+.pot-base {
+    width: 45px; height: 35px; background: #f4a261; border: 3px solid #111; border-top: none;
+    border-radius: 0 0 8px 8px; position: relative; z-index: 1;
+    box-shadow: inset -6px 0 0 rgba(0,0,0,0.15); 
+}
+
+.plant-stem {
+    width: 5px; height: 45px; background: #111;
+    position: absolute; bottom: 40px; z-index: 1;
+}
+.plant-leaves { position: absolute; bottom: 40px; width: 10px; height: 10px; z-index: 3; }
+
+.pixel-leaf {
+    position: absolute; background: #2ecc71; border: 3px solid #111;
+    width: 35px; height: 35px; box-shadow: inset 4px 4px 0 #a9f094;
+}
+.pixel-leaf::after {
+    content: ''; position: absolute; width: 100%; height: 100%;
+    border-right: 2px solid #111; border-bottom: 2px solid #111;
+    border-radius: inherit; top: -2px; left: -2px;
+}
+
+.leaf-1 { border-radius: 35px 0 35px 0; bottom: 5px; left: -30px; transform: rotate(-10deg); }
+.leaf-2 { border-radius: 0 35px 0 35px; bottom: 15px; left: -5px; transform: rotate(10deg); }
+.leaf-3 { border-radius: 35px 0 35px 0; bottom: 30px; left: -25px; transform: rotate(-30deg); }
+.leaf-4 { border-radius: 0 35px 0 35px; bottom: 40px; left: -5px; transform: rotate(30deg); }
+.leaf-5 { border-radius: 35px 0 35px 0; bottom: 45px; left: -15px; transform: rotate(-70deg); }
+
+@media (max-width: 1024px) {
+    .retro-phone { left: 4%; transform: scale(1.1); }
+    .retro-plant { right: 4%; transform: scale(1.5); }
+}
+@media (max-width: 768px) {
+    .desk-prop { display: none; }
+}
+
+/* --- THE MONITOR CHASSIS & KEYBOARD ALIGNMENT --- */
+.retro-workstation {
+    position: relative; z-index: 15; 
+    display: flex; flex-direction: column; align-items: center;
+    /* Dropped from 8vh to 2vh to plant the PC base firmly on the desk */
+    margin-bottom: 2vh; 
+}
+
+.retro-monitor-chassis {
+    background: #d36a22;
+    background-image: linear-gradient(135deg, #e67e22 0%, #c0392b 100%);
+    padding: 20px 25px 15px 25px; 
+    border-radius: 16px 16px 4px 4px;
+    box-shadow: inset 4px 4px 10px rgba(255,255,255,0.3), inset -8px -8px 20px rgba(0,0,0,0.5), 0 20px 30px rgba(0,0,0,0.9);
+    border: 3px solid #8e44ad;
+    position: relative; width: 85vw; max-width: 760px;
+    height: 48vh; /* Keeps it tight so keyboard fits */
+    z-index: 3;
+    display: flex; flex-direction: column;
+}
+
+.monitor-top-vents {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 250px; height: 8px;
+    background: repeating-linear-gradient(90deg, #5c2505, #5c2505 5px, transparent 5px, transparent 10px);
+    opacity: 0.8;
+}
+
+.monitor-bezel {
+    flex: 1; 
+    background: #111; padding: 20px; border-radius: 12px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 2px 0 rgba(255,255,255,0.2), 0 -2px 0 rgba(0,0,0,0.6);
+    border: 5px solid #222;
+    display: flex; flex-direction: column;
+}
+
+/* --- THE PC BASE UNIT (HORIZONTAL) --- */
+.pc-base-unit {
+    background: #e67e22;
+    background-image: linear-gradient(to right, #c0392b 0%, #e67e22 20%, #e67e22 80%, #c0392b 100%);
+    width: 95vw; max-width: 860px; 
+    height: 60px; /* Slimmer to save vertical space */
+    border-radius: 4px; border: 3px solid #8e44ad;
+    box-shadow: inset 4px 4px 10px rgba(255,255,255,0.4), inset -4px -8px 15px rgba(0,0,0,0.6), 0 15px 25px rgba(0,0,0,0.9);
+    margin-top: -10px; z-index: 2;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 30px;
+}
+.base-badge { font-family: Arial, sans-serif; font-size: 14px; font-weight: 900; color: #4a2311; text-shadow: 1px 1px 0 rgba(255,255,255,0.3); }
+.drive-bay-container { display: flex; flex-direction: column; gap: 8px; width: 160px; }
+.disk-drive { background: #1a1a1a; height: 14px; border-radius: 2px; box-shadow: inset 0 2px 4px #000, 0 1px 1px rgba(255,255,255,0.3); position: relative; display: flex; align-items: center; }
+.drive-slot { position: absolute; left: 10px; width: 100px; height: 4px; background: #000; box-shadow: inset 0 1px 2px #000; }
+.drive-btn { position: absolute; right: 25px; width: 10px; height: 6px; background: #555; border-radius: 1px; box-shadow: 1px 1px 2px #000; }
+.drive-light { position: absolute; right: 10px; width: 6px; height: 6px; border-radius: 50%; background: #300; }
+.active-pulse { animation: driveRead 0.2s infinite alternate; }
+@keyframes driveRead { 0% { background: #300; box-shadow: none; } 100% { background: #39ff14; box-shadow: 0 0 8px #39ff14; } }
+.power-bank { display: flex; align-items: center; gap: 20px; }
+.vent-grille { width: 60px; height: 25px; background: repeating-linear-gradient(180deg, #000, #000 3px, transparent 3px, transparent 6px); opacity: 0.5; }
+.hw-power-btn { width: 20px; height: 20px; border-radius: 4px; background: #e74c3c; box-shadow: 0 4px 0 #900, 0 5px 10px rgba(0,0,0,0.8), inset 0 2px 2px rgba(255,255,255,0.4); cursor: pointer; transition: all 0.1s; }
+.hw-power-btn:active { transform: translateY(4px); box-shadow: 0 0px 0 #900, 0 1px 2px rgba(0,0,0,0.8); }
+
+/* --- CRT SCREEN & WY CORPORATE STYLING --- */
+.crt-glass-screen {
+    background: #041408; height: 100%; border-radius: 16px;
+    position: relative; overflow: hidden; padding: 0; color: #39ff14;
+    box-shadow: inset 0 0 60px rgba(0,0,0,1); display: flex; flex-direction: column;
+}
+.crt-subtle-scanlines { position: absolute; inset: 0; background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; z-index: 50; }
+.crt-glare { position: absolute; inset: 0; background: linear-gradient(125deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 40%); pointer-events: none; z-index: 55; border-radius: 16px; }
+.crt-blink-out { animation: crtTurnOff 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+@keyframes crtTurnOff { 0% { transform: scale(1, 1); filter: brightness(1); } 20% { transform: scale(1, 0.01); filter: brightness(10); background: #fff; } 50% { transform: scale(0, 0.01); filter: brightness(10); } 100% { transform: scale(1, 1); filter: brightness(1); background: #041408; } }
+
+.legible-terminal { 
+    padding: 15px; 
+    display: flex; 
+    flex-direction: column; 
+    
+    /* THE FIREFOX FLEXBOX FIX: Forces it to respect the parent height */
+    flex: 1; 
+    min-height: 0; 
+    
+    box-sizing: border-box; 
+    overflow-y: auto; 
+    
+    /* THE FIREFOX SCROLLBAR FIX: Standardized scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #1a5c10 transparent;
+}
+
+/* --- RETRO SCROLLBAR FOR DESKTOP TERMINAL --- */
+.legible-terminal::-webkit-scrollbar { width: 8px; }
+.legible-terminal::-webkit-scrollbar-track { background: transparent; border-left: 2px solid #1a5c10; }
+.legible-terminal::-webkit-scrollbar-thumb { background: #1a5c10; border-radius: 2px; }
+.legible-terminal::-webkit-scrollbar-thumb:hover { background: #39ff14; }
+.legible-terminal * { font-family: 'VT323', monospace !important; color: #39ff14 !important; text-shadow: 1px 1px 0 #000, 0 0 3px rgba(57, 255, 20, 0.5) !important; }
+
+.wy-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1a5c10; padding-bottom: 8px; margin-bottom: 10px; }
+.wy-stats { font-size: 16px; line-height: 1.2; }
+.wy-sun { font-size: 24px; line-height: 1; text-shadow: 0 0 10px #39ff14 !important; animation: spin 10s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.wy-logo-block { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.wy-shape { display: flex; gap: 4px; align-items: flex-end; height: 20px; }
+.wy-wing { width: 20px; height: 8px; background: #39ff14; box-shadow: 0 0 5px #39ff14; }
+.wy-wing.left { transform: skewX(45deg); border-right: 4px solid #041408; }
+.wy-wing.right { transform: skewX(-45deg); border-left: 4px solid #041408; }
+.wy-center { width: 14px; height: 18px; background: #39ff14; box-shadow: 0 0 5px #39ff14; clip-path: polygon(50% 100%, 0 0, 100% 0); }
+.wy-text { font-family: 'Press Start 2P', monospace !important; font-size: 8px; letter-spacing: 2px; }
+
+.main-terminal-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.term-label { font-size: 16px !important; display: block; margin-bottom: 4px; }
+.term-input { background: #020a04 !important; border: 2px solid #1a5c10 !important; padding: 10px !important; width: 100%; box-sizing: border-box; font-size: 18px !important; outline: none !important; resize: none; transition: all 0.2s; }
+.term-input:focus { border-color: #39ff14 !important; background: #041c09 !important; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2) !important; }
+
+.wy-footer { border-top: 2px solid #1a5c10; padding-top: 10px; margin-top: auto; }
+.tactile-terminal-btn { background: #020a04 !important; border: 2px solid #39ff14 !important; font-size: 20px !important; padding: 10px !important; width: 100%; cursor: pointer; transition: all 0.1s; text-align: center; font-weight: bold; }
+.tactile-terminal-btn:hover { background: #1a5c10 !important; color: #fff !important; }
+
+/* Hearts & Badges */
+.term-meter { display: flex; align-items: center; position: relative; height: 35px; gap: 8px; cursor: pointer; }
+.term-heart { 
+    font-size: 30px !important; 
+    color: #1a5c10 !important; /* Brighter idle color so they stand out */
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.2) !important;
+    transition: all 0.1s; 
+    cursor: pointer;
+    animation: heartIdlePulse 1.5s infinite alternate; /* The new pulse */
+}
+
+@keyframes heartIdlePulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    100% { transform: scale(1.15); filter: brightness(1.5); }
+}
+
+/* Stops the idle pulse once the user clicks and a color class is applied */
+.term-heart.h-red,
+.term-heart.h-orange,
+.term-heart.h-yellow,
+.term-heart.h-chartreuse,
+.term-heart.h-green {
+    animation: none !important; 
+}
+.h-red { color: #ff0000 !important; text-shadow: 0 0 15px #ff0000 !important; transform: scale(1.1); }
+.h-orange { color: #ff9900 !important; text-shadow: 0 0 15px #ff9900 !important; transform: scale(1.1); }
+.h-yellow { color: #ffea00 !important; text-shadow: 0 0 15px #ffea00 !important; transform: scale(1.1); }
+.h-chartreuse { color: #ccff00 !important; text-shadow: 0 0 15px #ccff00 !important; transform: scale(1.1); }
+.h-green { color: #39ff14 !important; text-shadow: 0 0 15px #39ff14 !important; transform: scale(1.1); }
+
+.flawless-badge { position: absolute; right: 0; background: #39ff14; color: #000 !important; font-family: 'Press Start 2P', monospace !important; font-size: 9px !important; padding: 6px 10px; border-radius: 2px; box-shadow: 0 0 15px #39ff14; opacity: 0; pointer-events: none; text-shadow: none !important; }
+.flawless-badge.show { opacity: 1; animation: badgePop 0.4s forwards; }
+@keyframes badgePop { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+
+/* Disk Space Bar */
+.disk-space-container { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 5px; }
+.disk-track { width: 180px; height: 14px; background: #020a04; border: 2px solid #1a5c10; padding: 2px; }
+.disk-fill { height: 100%; width: 0%; background: repeating-linear-gradient(90deg, #39ff14, #39ff14 4px, transparent 4px, transparent 6px); transition: width 0.2s; }
+.disk-fill.warning { background: repeating-linear-gradient(90deg, #ffea00, #ffea00 4px, transparent 4px, transparent 6px); }
+.disk-fill.critical { background: repeating-linear-gradient(90deg, #ff0000, #ff0000 4px, transparent 4px, transparent 6px); }
+.term-dual-row { display: flex; gap: 15px; width: 100%; }
+.text-center { text-align: center !important; letter-spacing: 4px; }
+
+/* Cascading Success Layout */
+.success-layout { display: flex; flex-direction: column; justify-content: space-between; height: 100%; text-align: center; }
+.success-top { border-bottom: 2px solid #1a5c10; padding-bottom: 20px; }
+.success-middle { flex: 1; display: flex; align-items: center; justify-content: center; }
+.success-bottom { border-top: 2px solid #1a5c10; padding-top: 20px; }
+.term-success-title { font-size: 48px !important; margin-bottom: 10px; }
+.term-desc { font-size: 24px !important; line-height: 1.5; }
+.blink-text { animation: textBlink 1s infinite steps(2); }
+@keyframes textBlink { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+/* BIG RED ERROR OVERLAY */
+.critical-error-overlay { position: absolute; inset: 0; background: rgba(40, 0, 0, 0.95); z-index: 100; display: none; justify-content: center; align-items: center; text-align: center; border: 10px solid #ff0000; box-sizing: border-box; }
+.critical-error-overlay.active { display: flex; animation: redAlertFlash 0.15s infinite alternate; }
+.error-box { font-family: 'Press Start 2P', monospace !important; color: #ff0000 !important; text-shadow: 0 0 10px #ff0000 !important; font-size: 14px; line-height: 2; }
+.error-blink { font-size: 20px !important; animation: errorBlink 0.5s infinite; color: #fff !important; }
+@keyframes redAlertFlash { 0% { background: rgba(50, 0, 0, 0.9); } 100% { background: rgba(100, 0, 0, 0.95); } }
+@keyframes errorBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+/* --- PERIPHERALS (PULLED UP ONTO DESK) --- */
+.peripherals-zone { 
+    display: flex; justify-content: center; align-items: flex-end; gap: 40px; 
+    /* Use a negative margin to pull the keyboard closer to the PC base */
+    margin-top: -5px; z-index: 20; 
+    transform: perspective(600px) rotateX(20deg) translateY(-10px); 
+}
+.retro-keyboard {
+    background: #c5c3b6; border: 3px solid #8e8b7e; border-radius: 4px; padding: 12px;
+    display: grid; grid-template-columns: repeat(15, 1fr); gap: 4px;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.8); width: 500px;
+}
+.kb-key { background: #e0ded1; border-radius: 2px; height: 25px; box-shadow: 0 4px 0 #9c9a8d, 0 5px 5px rgba(0,0,0,0.4), inset 0 1px 2px #fff; transition: all 0.05s; }
+.kb-key.pressed { transform: translateY(4px); box-shadow: 0 0px 0 #9c9a8d, 0 1px 2px rgba(0,0,0,0.4), inset 0 1px 4px rgba(0,0,0,0.2); background: #d1cfc0; }
+.kb-space { grid-column: span 6; } .kb-enter { grid-column: span 2; }
+.retro-mouse {
+    width: 60px; height: 90px; background: #e67e22; border-radius: 30px 30px 10px 10px;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.8), inset -4px -4px 10px rgba(0,0,0,0.4), inset 4px 4px 10px rgba(255,255,255,0.4);
+    border: 2px solid #b35900; display: flex; gap: 2px; padding: 4px; position: relative;
+}
+.retro-mouse::before { content: ''; position: absolute; top: -25px; left: 50%; width: 4px; height: 25px; background: #333; }
+.mouse-btn { flex: 1; height: 35px; background: #e0ded1; border-radius: 20px 20px 2px 2px; box-shadow: 0 3px 0 #9c9a8d, inset 0 2px 2px #fff; }
+.mouse-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #9c9a8d; }
+
+/* =========================================
+   MOBILE OPTIMIZATION (TACTICAL DATAPAD)
+   ========================================= */
+@media (max-width: 768px) {
+    /* 1. Reset the room to dynamic viewport height */
+    body.workstation-room {
+        height: 100dvh !important;
+    }
+
+    /* 2. Hide all the heavy 3D desk components */
+    .pc-base-unit, 
+    .peripherals-zone, 
+    .desk-surface, 
+    .desk-prop { 
+        display: none !important; 
+    }
+
+    /* 3. Strip the monitor margins so it fills the screen */
+    .retro-workstation {
+        margin: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+    }
+
+    /* 4. Flatten the chassis into a flush bezel */
+    .retro-monitor-chassis { 
+        width: 100% !important; 
+        height: 100% !important;
+        max-width: none !important;
+        border-radius: 0 !important; 
+        padding: 8px !important; 
+        border: none !important; 
+    }
+
+    .monitor-bezel {
+        padding: 10px !important;
+        height: 100% !important;
+        border-radius: 8px !important;
+    }
+
+    /* 5. THE FIX: Flatten constraints for mobile */
+    .crt-glass-screen { 
+        height: 100% !important; 
+        padding: 15px !important;
+        display: block !important; /* Removes flex constraints that crush content */
+    }
+
+    /* 6. Form Alignment & Stacking for Narrow Screens */
+    .term-dual-row { 
+        flex-direction: column !important; 
+        gap: 15px !important; 
+    }
+    
+    .wy-header {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+        text-align: center !important;
+        position: relative !important;
+    }
+
+    .wy-logo-block {
+        order: -1; /* Pushes the Subtitle Arcade logo to the very top */
+    }
+
+    .wy-sun {
+        position: absolute !important;
+        top: 0px !important;
+        right: 0px !important;
+        font-size: 20px !important;
+    }
+
+    /* 7. Fit the Humanity Meter on one line */
+    .term-meter {
+        justify-content: space-between !important;
+        height: auto !important;
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+    
+
+    /* Moves the 100% Human badge below the hearts so it doesn't overlap */
+    .flawless-badge {
+        position: relative !important;
+        margin-top: 10px !important;
+        width: 100% !important;
+        text-align: center !important;
+        transform: none !important;
+    }
+    .flawless-badge.show {
+        animation: none !important; /* Disables the slide-in pop on mobile */
+    }
+    
+    .disk-space-container {
+        justify-content: flex-start !important;
+    }
+
+    .term-success-title {
+        font-size: 32px !important;
+    }
+}
+
+/* --- DEBRIEF BUTTON & SCREEN GLITCH ANIMATIONS --- */
+
+/* 1. Button Blink Effect */
+.blink-pulse-animation {
+    animation: neonGlowPulse 1.5s infinite alternate !important;
+}
+
+@keyframes neonGlowPulse {
+    0% { color: #ffea00; text-shadow: 0 0 10px #ff7700; transform: scale(1); }
+    50% { color: #00f0ff; text-shadow: 0 0 15px #0077ff; transform: scale(1.05); }
+    100% { color: #ff007f; text-shadow: 0 0 12px #ff0055; transform: scale(1); }
+}
+
+/* 2. Glitch Transition Effect */
+.glitch-crash { 
+    animation: violentGlitchForm 0.4s cubic-bezier(.25,.46,.45,.94) forwards !important; 
+}
+
 @keyframes violentGlitchForm {
     0% { transform: translate(0) skewX(0); filter: hue-rotate(0deg); }
     20% { transform: translate(-10px, 5px) skewX(10deg); filter: hue-rotate(90deg) invert(1); }
@@ -2726,330 +3172,47 @@ width: 100% !important;      /* Forces the text span to fill the width */
     80% { transform: translate(10px, -10px) skewX(-5deg); filter: hue-rotate(360deg); }
     100% { transform: translate(0) skewX(0); filter: none; }
 }
-.glitch-crash { animation: violentGlitchForm 0.4s cubic-bezier(.25,.46,.45,.94) forwards !important; }
 
-
-/* =========================================
-   ANDROID-SPECIFIC OVERRIDES
-   ========================================= */
-
-/* Replace the drop-shadow filter with standard text-shadow ONLY on Android */
-body.android .main-title {
-    filter: none !important; /* Kill the filter that Android dislikes */
-    text-shadow: 
-        0px 3px 0px #000, 
-        0px -3px 0px #000, 
-        3px 0px 0px #000, 
-        -3px 0px 0px #000, 
-        0 0 12px rgba(255,0,0,0.6) !important;
+/* --- MULTICOLOR BUTTON PULSE --- */
+.rainbow-pulse-btn {
+    animation: neonHueCycle 1.2s infinite steps(4) !important;
 }
 
-body.android .bot-side h3, 
-body.android .human-side h3 {
-    filter: none !important;
-    text-shadow: 2px 2px 0px #000, 0 0 15px currentColor !important;
-}
-
-/* --- RESTORE HEAVY CRT CURVES (FORMAT DATABASE & DEPLOYMENT MANUAL) --- */
-#formatInterface {
-    border-radius: 40% / 8% !important;
-    box-shadow: inset 0 0 100px rgba(0,0,0,1), inset 0 0 30px rgba(0,240,255,0.15) !important;
-    overflow: hidden !important;
+@keyframes neonHueCycle {
+    0% { filter: hue-rotate(0deg) drop-shadow(0 0 5px rgba(57,255,20,0.8)); }       /* Green */
+    25% { filter: hue-rotate(90deg) drop-shadow(0 0 5px rgba(0,240,255,0.8)); }     /* Cyan */
+    50% { filter: hue-rotate(180deg) drop-shadow(0 0 5px rgba(255,0,127,0.8)); }    /* Pink */
+    75% { filter: hue-rotate(270deg) drop-shadow(0 0 5px rgba(255,234,0,0.8)); }    /* Yellow */
+    100% { filter: hue-rotate(360deg) drop-shadow(0 0 5px rgba(57,255,20,0.8)); }   /* Back to Green */
 }
 
 /* ========================================================
-   PERMANENT 8-BIT PERFORMANCE ARCHITECTURE (REVISED)
-   ======================================================== */
-
-/* 1. Force crisp 8-bit pixels for all upscaled canvases */
-canvas {
-    image-rendering: pixelated !important;
-    transform: translateZ(0); /* Offloads canvas rendering to the GPU */
-}
-
-/* 2. Format Database: Restore Background & Hardware Accelerate */
-.pixel-matrix-bg {
-    filter: none !important; 
-    opacity: 1 !important; /* RESTORES VISIBILITY */
-    transform: translateZ(0); /* Forces GPU to handle the background */
-    will-change: transform;
-}
-
-/* 3. Format Database: Kill the sweeping laser gradient (Massive GPU saver) */
-.matrix-scanline-laser {
-    display: none !important; 
-}
-
-/* 4. Strip extreme 16-layer inline text shadows on the VS screen */
-[style*="text-shadow"] {
-    text-shadow: 2px 2px 0px #000 !important;
-}
-
-/* 6. Hide Taxing Particle Details */
-.sparks, .sparks::after {
-    display: none !important;
-}
-
-/* ========================================================
-   UNIVERSAL CONSOLE MASTER LOCK (ALL SCREENS > 768px)
+   SMALL MONITOR WORKSTATION SQUASH FIX (CORRECTED)
    ======================================================== */
 @media (min-width: 769px) {
+    /* 1. Forces the width to scale down proportionally with the screen height */
+    .retro-monitor-chassis {
+        max-width: min(760px, 70vh) !important; 
+    }
     
-    #missionSuccessModal.mission-active {
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 20px !important;
-        box-sizing: border-box !important;
-    }
-
-    .synth-popup-box {
-        position: relative !important;
-        width: 90vw !important; 
-        max-width: 1100px !important; 
-        height: 90vh !important; 
-        max-height: 850px !important; 
-        margin: auto !important; 
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-end !important; 
-        overflow: hidden !important; 
-        border: 6px solid var(--neon-pink) !important; 
-        border-radius: 12px !important;
-        padding: 0 !important;
-    }
-
-    #ufoCockpitVideo,
-    #ufoShipHull > div[style*="rgba(15, 0, 25, 0.3)"] {
-        position: absolute !important;
-        top: 0 !important; left: 0 !important;
-        width: 100% !important; 
-        height: 100% !important;
-        object-fit: cover !important;
-        z-index: 1 !important;
-    }
-
-    .synth-dashboard-wrapper {
-        position: relative !important;
-        z-index: 50 !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: flex-end !important;
-        bottom: 0 !important;
-        transform: none !important; 
-    }
-
-    .pilot-seat {
-        bottom: -20px !important;
-        z-index: 45 !important;
-        transform: none !important; 
-    }
-
-    /* --- MASTER HEIGHT & WIDTH CONTROLS --- */
-    /* Edit these! They now govern ALL desktop and laptop screens. */
-    
-    #missionSuccessModal .heavy-machinery-angled {
-        width: 100% !important;
-        max-width: 95vw !important;   /* <--- Stretches it out horizontally */
-        margin: 0 auto !important; 
-        min-height: 280px !important; /* <--- ENTIRE GREEN CONSOLE HEIGHT */
-        height: 280px !important;     /* <--- ENTIRE GREEN CONSOLE HEIGHT */
-        border-radius: 12px 12px 0 0 !important;
-        border-bottom: none !important;
-        transform: rotateX(35deg) !important; 
-        transform-origin: bottom center !important;
-    }
-
-    #missionSuccessModal .display-module {
-        min-height: 240px !important; /* <--- Must be slightly smaller than console height */
-        height: 240px !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    #missionSuccessModal #monitor1,
-    #missionSuccessModal #monitor2,
-    #missionSuccessModal .dual-monitor-setup {
-        min-height: 140px !important; /* <--- BLACK SCREEN HEIGHT */
-        height: 140px !important;     /* <--- BLACK SCREEN HEIGHT */
-        display: flex !important;
-        align-items: stretch !important;
-    }
-
-    #missionSuccessModal .crt-glass,
-    #missionSuccessModal .crt-bezel {
-        min-height: 100% !important;
-        height: 100% !important;
-    }
-
-    #missionSuccessModal .flight-stick-area {
-        margin-top: auto !important;
-        padding-top: 20px !important;
+    /* 2. Shrinks the PC base to perfectly match the new monitor width */
+    .pc-base-unit {
+        max-width: min(860px, 80vh) !important;
     }
 }
 
-/* ========================================================
-   HIGH SCORES & FORMAT DATABASE REPAIRS
-   ======================================================== */
-@media (max-height: 850px) and (min-width: 769px), (max-width: 1400px) and (min-width: 769px) {
-    #missionSuccessModal .tactical-wing .button-bank { margin-top: 20px !important; justify-content: flex-start !important; }
-    
-    #trophiesInterface { overflow-y: auto !important; }
-    #trophiesInterface .high-score-zone { height: auto !important; min-height: 100vh !important; padding-bottom: 80px !important; overflow: visible !important; }
-
-    #formatLibraryCanvas { max-height: 35vh !important; object-fit: contain; }
-    #formatInterface .format-content-wrapper > div:nth-of-type(1) { margin-bottom: -25px !important; }
-    #formatInterface .format-content-wrapper > div:nth-of-type(1) > div { gap: 15px !important; padding: 5px !important; transform: none !important; flex-wrap: wrap !important; align-items: flex-start !important; justify-content: center !important; }
-    #formatInterface .arcade-round-btn { width: 50px !important; height: 50px !important; }
-    #formatInterface .arcade-btn-label { font-size: 9px !important; line-height: 1.2 !important; }
-    #formatInterface .arcade-control-group { gap: 20px !important; }
-    #formatInterface .cat-desc, #formatInterface .format-p { font-size: 16px !important; margin-top: 5px !important; margin-bottom: 15px !important; line-height: 1.3 !important; }
-    /* Format Database: PULL UP THE ENTIRE TEXT ZONE */
-    #formatInterface .format-content-zone { 
-        margin-top: -30px !important;  /* Physically pulls the entire text block higher */
-        position: relative !important;
-        z-index: 20 !important;
+/* 3. Safely scales the 3D keyboard and mouse in unison on short screens */
+@media (min-width: 769px) and (max-height: 850px) {
+    .peripherals-zone {
+        transform: perspective(600px) rotateX(20deg) translateY(-10px) scale(0.8) !important;
+        transform-origin: top center !important;
     }
 }
 
-/* ========================================================
-   FILE NAME OVERFLOW & FLEXBOX SHRINK FIX
-   ======================================================== */
-
-/* 1. Destroy the hidden Flexbox 'min-width: auto' rule that prevents shrinking */
-#deliverablesDeploymentDrawer .display-module,
-#deliverablesDeploymentDrawer .crt-bezel,
-#deliverablesDeploymentDrawer .crt-glass,
-#deliverablesDeploymentDrawer .dos-inner-content {
-    min-width: 0 !important; 
-    overflow-x: hidden !important;
-}
-
-/* 2. Lock down the text wrapper so it strictly enforces the width limit */
-.dos-body {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    white-space: pre-wrap !important;
-    word-break: normal !important;         /* THE FIX: Allows normal words to stay together */
-    overflow-wrap: anywhere !important;    /* Keeps the long file names safely wrapped */
-}
-
-/* 3. Apply the wrapping rules to the span itself */
-#dosOutput {
-    white-space: pre-wrap !important;
-    word-break: normal !important;         /* THE FIX */
-    overflow-wrap: anywhere !important;
-}
-
-/* 4. Kill Apple/Mobile auto-link injection and font-inflation */
-.dos-body *, #dosOutput, #dosOutput a {
-    -webkit-text-size-adjust: none !important; /* Prevents artificial font boosting */
-    text-size-adjust: none !important;
-    color: inherit !important;
-    text-decoration: none !important;
-    pointer-events: none !important;
-}
-
-/* ========================================================
-   MOBILE HUB BACKGROUND SCROLL REPAIR (PAINTED WALL FIX)
-   ======================================================== */
-@media (max-width: 768px) {
-    /* 1. Nuke the physical background div so Safari cannot drag it */
-    #systemSettingsHub .dreamy-bg {
-        display: none !important;
+/* 4. Scales them down even further on ultra-short screens (like small laptops) */
+@media (min-width: 769px) and (max-height: 700px) {
+    .peripherals-zone {
+        transform: perspective(600px) rotateX(20deg) translateY(-10px) scale(0.65) !important;
+        transform-origin: top center !important;
     }
-
-    /* 2. Paint the image natively onto the outer container's wall */
-    #systemSettingsHub {
-        background-color: #0a1118 !important;
-        background-image: url('stock-photo-glitch-art-scan-line-background-scan-line-monitor-old-technology.jpg') !important;
-        
-        /* THE FIX: Stretch the background 50% further down, and let it repeat vertically so it never hits black */
-        background-size: 100% 150% !important; 
-        background-position: center top !important;
-        background-repeat: repeat-y !important; 
-        
-        background-attachment: scroll !important; 
-    }
-} /* <--- THIS WAS THE MISSING CLOSING BRACKET! ---> */
-
-/* =========================================
-   HARDWARE SCROLL ENGINES (MOBILE FIX)
-   ========================================= */
-
-/* 1. Global iOS Scroll Unlock for all SPA Layers */
-.spa-layer {
-    -webkit-overflow-scrolling: touch;
-}
-
-/* 3. The new wrapper handles 100% of the scrolling and centering */
-.hub-scroll-wrapper {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    z-index: 10 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important; /* <--- THIS CENTERS THE MONITORS VERTICALLY */
-    padding: 32px !important;
-    -webkit-overflow-scrolling: touch !important;
-}
-
-/* Mobile specific wrapper adjustments */
-@media (max-width: 768px) {
-    .hub-scroll-wrapper {
-        justify-content: center !important; /* <--- Forces vertical centering on mobile too */
-        padding: 20px 10px 80px 10px !important;
-    }
-}
-
-/* ========================================================
-   STATIONARY KNOB SHADOW & LIGHTING FIX
-   ======================================================== */
-/* 1. Create a stacking context so shadows stay inside the rack */
-.analog-knob {
-    position: relative !important;
-    z-index: 1 !important;
-}
-
-/* 2. Strip the rotating shadows off the dial */
-.knob-dial {
-    box-shadow: none !important;
-}
-
-/* 3. Cast the dark drop-shadow from a stationary background layer */
-.analog-knob::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 60px !important;
-    height: 60px !important;
-    border-radius: 50% !important;
-    box-shadow: 0 12px 15px rgba(0,0,0,0.9) !important;
-    z-index: -1 !important;
-    pointer-events: none !important;
-}
-
-/* 4. Cast the bright lighting highlight from a stationary foreground layer */
-.analog-knob::after {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 60px !important;
-    height: 60px !important;
-    border-radius: 50% !important;
-    box-shadow: inset 0 3px 4px rgba(255,255,255,0.6) !important;
-    z-index: 10 !important;
-    pointer-events: none !important;
 }
