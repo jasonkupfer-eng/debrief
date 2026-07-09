@@ -3187,22 +3187,32 @@ body.workstation-room {
 }
 
 /* ========================================================
-   SMALL MONITOR WORKSTATION SQUASH FIX
+   SMALL MONITOR WORKSTATION SQUASH FIX (CORRECTED)
    ======================================================== */
 @media (min-width: 769px) {
-    /* Forces the width to scale down proportionally with the screen height */
+    /* 1. Forces the width to scale down proportionally with the screen height */
     .retro-monitor-chassis {
         max-width: min(760px, 70vh) !important; 
     }
     
-    /* Shrinks the PC base to perfectly match the new monitor width */
+    /* 2. Shrinks the PC base to perfectly match the new monitor width */
     .pc-base-unit {
         max-width: min(860px, 80vh) !important;
     }
-    
-    /* Shrinks the keyboard so it never overhangs the sides of the PC */
-    .retro-keyboard {
-        width: 100% !important;
-        max-width: min(500px, 55vh) !important;
+}
+
+/* 3. Safely scales the 3D keyboard and mouse in unison on short screens */
+@media (min-width: 769px) and (max-height: 850px) {
+    .peripherals-zone {
+        transform: perspective(600px) rotateX(20deg) translateY(-10px) scale(0.8) !important;
+        transform-origin: top center !important;
+    }
+}
+
+/* 4. Scales them down even further on ultra-short screens (like small laptops) */
+@media (min-width: 769px) and (max-height: 700px) {
+    .peripherals-zone {
+        transform: perspective(600px) rotateX(20deg) translateY(-10px) scale(0.65) !important;
+        transform-origin: top center !important;
     }
 }
