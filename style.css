@@ -3185,3 +3185,24 @@ body.workstation-room {
     75% { filter: hue-rotate(270deg) drop-shadow(0 0 5px rgba(255,234,0,0.8)); }    /* Yellow */
     100% { filter: hue-rotate(360deg) drop-shadow(0 0 5px rgba(57,255,20,0.8)); }   /* Back to Green */
 }
+
+/* ========================================================
+   SMALL MONITOR WORKSTATION SQUASH FIX
+   ======================================================== */
+@media (min-width: 769px) {
+    /* Forces the width to scale down proportionally with the screen height */
+    .retro-monitor-chassis {
+        max-width: min(760px, 70vh) !important; 
+    }
+    
+    /* Shrinks the PC base to perfectly match the new monitor width */
+    .pc-base-unit {
+        max-width: min(860px, 80vh) !important;
+    }
+    
+    /* Shrinks the keyboard so it never overhangs the sides of the PC */
+    .retro-keyboard {
+        width: 100% !important;
+        max-width: min(500px, 55vh) !important;
+    }
+}
